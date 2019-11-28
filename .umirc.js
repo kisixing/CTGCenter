@@ -64,6 +64,12 @@ export default {
               context: { title: '文件上传' },
             },
           ],
+          bed: [
+            './src/pages/bed',
+            {
+              context: { title: '床位管理' },
+            },
+          ],
         },
         html: {
           template: './src/common/document.ejs',
