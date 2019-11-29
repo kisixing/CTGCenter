@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 // import App from './ControlCenter';
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Table, Input, Popconfirm, Form, Button, Select } from 'antd';
 // import { mapStatusToText } from '@/constant'
@@ -9,7 +9,7 @@ import request from "@lianmed/request";
 // import Subscribe from "./Subscribe";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 const prefix = (window as any).CONFIG.baseURL;
-
+import useLogin from "./useLogin";
 
 const mapStatusToText = {
     1: '工作中',
@@ -20,15 +20,7 @@ const mapStatusToText = {
 
 
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-    data.push({
-        key: i.toString(),
-        name: `Edrward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
-    });
-}
+
 const EditableContext = React.createContext<WrappedFormUtils>(null);
 
 class EditableCell extends React.Component<any, any> {
@@ -88,122 +80,107 @@ class EditableCell extends React.Component<any, any> {
     }
 }
 
-class EditableTable extends React.Component<{ data: any[], form: any }, any> {
-    columns: any[]
-    constructor(props) {
-        super(props);
-        this.state = { data, editingKey: '' };
-        this.columns = [
-            ...[
-                {
-                    title: '名称',
-                    dataIndex: 'bedname',
-                    key: 'bedname',
-                },
-                {
-                    title: '设备编号',
-                    dataIndex: 'deviceno',
-                    key: 'deviceno',
-                },
-                {
-                    title: '子机号',
-                    dataIndex: 'subdevice',
-                    key: 'subdevice',
-                },
-                {
-                    title: '床号',
-                    dataIndex: 'bedno',
-                    key: 'bedno',
-                },
-                {
-                    title: '状态',
-                    dataIndex: 'status',
-                    key: 'status',
-                    render: (text, record) => {
-                        return mapStatusToText[text];
-                    },
-                },
-                {
-                    title: '设备类型',
-                    dataIndex: 'type',
-                    key: 'type',
-                    align: 'center',
-                },
-            ].map(_ => ({ ..._, editable: true, align: 'center' })),
+const EditableTable = (props: any) => {
+    const [dd, setDd] = useState(null)
+    const [editingKey, setEditingKey] = useState('')
+
+    const fetchData = () => {
+        request.get(`/bedinfos`).then(d => setDd(d))
+    }
+    useLogin(fetchData)
+    
+    const columns = [
+        ...[
             {
-                title: '操作',
-                dataIndex: 'operation',
+                title: '名称',
+                dataIndex: 'bedname',
+                key: 'bedname',
+            },
+            {
+                title: '设备编号',
+                dataIndex: 'deviceno',
+                key: 'deviceno',
+            },
+            {
+                title: '子机号',
+                dataIndex: 'subdevice',
+                key: 'subdevice',
+            },
+            {
+                title: '床号',
+                dataIndex: 'bedno',
+                key: 'bedno',
+            },
+            {
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
                 render: (text, record) => {
-                    const { editingKey } = this.state;
-                    const editable = this.isEditing(record);
-                    return editable ? (
-                        <span>
-                            <EditableContext.Consumer>
-                                {form => (
-                                    <Button
-                                        size="small"
-                                        type="link"
-                                        onClick={() => this.save(form, record.id)}
-                                        style={{ marginRight: 8 }}
-                                    >
-                                        保存
-                                   </Button>
-                                )}
-                            </EditableContext.Consumer>
-                            <Popconfirm title="确认取消?" okText="是" cancelText="否" onConfirm={() => this.cancel()}>
-                                <Button size="small" type="link">
-                                    取消
-                                </Button>
-                            </Popconfirm>
-                        </span>
-                    ) : (
-                            <Button
-                                size="small"
-                                type="link"
-                                disabled={editingKey !== ''}
-                                onClick={() => this.edit(record.id)}
-                            >
-                                编辑
-                            </Button>
-                        );
+                    return mapStatusToText[text];
                 },
             },
-        ];
-    }
-    isEditing = record => {
-        const status = record.id === this.state.editingKey;
+            {
+                title: '设备类型',
+                dataIndex: 'type',
+                key: 'type',
+                align: 'center',
+            },
+        ].map(_ => ({ ..._, editable: true, align: 'center' })),
+        {
+            title: '操作',
+            dataIndex: 'operation',
+            render: (text, record) => {
+
+                const editable = isEditing(record);
+                return editable ? (
+                    <span>
+                        <EditableContext.Consumer>
+                            {form => (
+                                <Button
+                                    size="small"
+                                    type="link"
+                                    onClick={() => save(form, record.id)}
+                                    style={{ marginRight: 8 }}
+                                >
+                                    保存
+                               </Button>
+                            )}
+                        </EditableContext.Consumer>
+                        <Popconfirm title="确认取消?" okText="是" cancelText="否" onConfirm={cancel}>
+                            <Button size="small" type="link">
+                                取消
+                            </Button>
+                        </Popconfirm>
+                    </span>
+                ) : (
+                        <Button
+                            size="small"
+                            type="link"
+                            disabled={editingKey !== ''}
+                            onClick={() => setEditingKey(record.id)}
+                        >
+                            编辑
+                        </Button>
+                    );
+            },
+        },
+    ]
+
+    const isEditing = record => {
+        const status = record.id === editingKey;
         return status
     }
 
-    cancel = () => {
-        this.setState({ editingKey: '' });
+    const cancel = () => {
+        setEditingKey('')
     };
-    componentDidMount() {
-        const sp = new window.URL(location.href).searchParams
-        const password = sp.get('password')
-        const username = sp.get('username')
-        let data
-        if (password && username) {
-            data = { password, username }
-        } else {
-            data = (window as any).CONFIG && (window as any).CONFIG.account
-        }
-        request.post('/authenticate', { data, prefix }).then(({ id_token }: any) => {
-            request.config({ Authorization: id_token, prefix })
-            this.fetchData()
 
-        })
-
-    }
-    fetchData = () => {
-        request.get(`/bedinfos`).then(dd => this.setState({ dd }))
-    }
-    save(form, id) {
+    const save = (form, id) => {
         form.validateFields((error, row) => {
             if (error) {
                 return;
             }
-            const newData = [...this.state.dd];
+            const newData = [...dd];
             const index = newData.findIndex(item => id === item.id);
             if (index > -1) {
 
@@ -213,66 +190,62 @@ class EditableTable extends React.Component<{ data: any[], form: any }, any> {
                         ...row,
                     }
                 }).then(data => {
-                    this.fetchData()
-                    this.setState({ editingKey: '' });
+                    fetchData()
+                    setEditingKey('')
 
                 })
 
             } else {
                 newData.push(row);
-                this.setState({ data: newData, editingKey: '' });
+                setEditingKey('')
+                setDd(newData)
             }
         });
     }
 
-    edit(id) {
-        console.log('edit', id)
-        this.setState({ editingKey: id });
-    }
 
-    render() {
-        const components = {
-            body: {
-                cell: EditableCell,
-            },
+
+    const components = {
+        body: {
+            cell: EditableCell,
+        },
+    };
+
+    const c = columns.map(col => {
+        if (!(col as any).editable) {
+            return col;
+        }
+        return {
+            ...col,
+            onCell: record => ({
+                record,
+                inputType: col.dataIndex === 'status' ? 'number' : 'text',
+                dataIndex: col.dataIndex,
+                title: col.title,
+                editing: isEditing(record),
+            }),
         };
+    });
+    return (
+        <EditableContext.Provider value={props.form}>
+            <div style={{ padding: 20 }}>
+                <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>床位设置</p>
+                <Table
+                    size="small"
+                    components={components}
+                    bordered
+                    rowKey="id"
+                    dataSource={dd}
+                    columns={c as any}
+                    // rowClassName="editable-row"
+                    pagination={{
+                        onChange: cancel,
+                    }}
+                />
+            </div>
 
-        const columns = this.columns.map(col => {
-            if (!col.editable) {
-                return col;
-            }
-            return {
-                ...col,
-                onCell: record => ({
-                    record,
-                    inputType: col.dataIndex === 'status' ? 'number' : 'text',
-                    dataIndex: col.dataIndex,
-                    title: col.title,
-                    editing: this.isEditing(record),
-                }),
-            };
-        });
-        return (
-            <EditableContext.Provider value={this.props.form}>
-                <div style={{padding:20}}>
-                    <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px',fontSize:16 }}>床位设置</p>
-                    <Table
-                        size="small"
-                        components={components}
-                        bordered
-                        rowKey="id"
-                        dataSource={this.state.dd}
-                        columns={columns}
-                        // rowClassName="editable-row"
-                        pagination={{
-                            onChange: this.cancel,
-                        }}
-                    />
-                </div>
-
-            </EditableContext.Provider>
-        );
-    }
+        </EditableContext.Provider>
+    );
 }
 
 const EditableFormTable = Form.create()(EditableTable);

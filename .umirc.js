@@ -64,10 +64,16 @@ export default {
               context: { title: '文件上传' },
             },
           ],
-          bed: [
+          床位管理: [
             './src/pages/bed',
             {
               context: { title: '床位管理' },
+            },
+          ],
+          监护页: [
+            './src/pages/ctg',
+            {
+              context: { title: '监护页' },
             },
           ],
         },
