@@ -99,6 +99,10 @@ export class SiderMenu extends Component {
           <Icon type="upload" />
           <span>监护页</span>
         </Menu.Item>
+        <Menu.Item key="008" title="用户管理" href={`${origin}/user-account.html`}>
+          <Icon type="user" />
+          <span>用户管理</span>
+        </Menu.Item>
       </Menu>
     );
   }

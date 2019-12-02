@@ -40,7 +40,7 @@ class EditableCell extends React.Component<any, any> {
                 </Select>
             )
         }
-        return <Input />;
+      return <Input disabled={this.props.disabled} />;
     };
 
     renderCell = ({ getFieldDecorator }) => {
@@ -225,11 +225,13 @@ const EditableTable = (props: any) => {
         if (!(col as any).editable) {
             return col;
         }
+        console.log('88888888888', col)
         return {
             ...col,
             onCell: record => ({
                 record,
                 inputType: col.dataIndex === 'status' ? 'number' : 'text',
+                disabled: ['deviceno', 'subdevice', 'bedno'].includes(col.dataIndex) ? true :false,
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),

@@ -76,6 +76,12 @@ export default {
               context: { title: '监护页' },
             },
           ],
+          'user-account': [
+            './src/pages/user-management',
+            {
+              context: { title: '用户管理' },
+            },
+          ],
         },
         html: {
           template: './src/common/document.ejs',

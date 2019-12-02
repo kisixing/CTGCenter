@@ -16,10 +16,42 @@ import styles from './index.less';
 class Upload extends Component {
   state = {
     loading: false,
+    historyList: {
+      'ctg-suit': [],
+      'pda': []
+    }
   };
+
+  componentDidMount() {
+    this.fetchHistoryVersion();
+  }
 
   reset = () => {
     this.props.form.resetFields();
+  }
+
+  // 获取历史版本列表
+  fetchHistoryVersion = () => {
+    const _this = this;
+    const { historyList } = this.state;
+    request
+      .get('/versions')
+      .then(function(response) {
+        const d = response.data;
+        for (let i = 0; i < d.length; i++) {
+          const element = d[i];
+          if (element.type === 'ctg-suit') {
+            historyList['ctg-suit'].push(element);
+          }
+          if (element.type === 'pda') {
+            historyList['pda'].push(element);
+          }
+        }
+        // 分版本
+        // console.log('object', d, historyList);
+        _this.setState({ historyList });
+      })
+      .catch(function(error) {});
   }
 
   submit = () => {
@@ -39,7 +71,7 @@ class Upload extends Component {
           a.append(k, v);
           return a;
         }, fd);
-      console.log('upload data', values, data);
+      // console.log('upload data', values, data);
 
       request({
         method: 'POST',
@@ -65,59 +97,82 @@ class Upload extends Component {
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, historyList } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 10 },
+        sm: { span: 16 },
       },
     };
     return (
       <div className={styles.container}>
         <div className={styles.title}>文件上传</div>
-        <Form {...formItemLayout} layout="horizontal" className={styles.form}>
-          <Form.Item label="版本号">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入版本号!' }],
-            })(<Input placeholder="请输入版本号" />)}
-          </Form.Item>
-          <Form.Item label="安装包类型">
-            {getFieldDecorator('type', {
-              rules: [{ required: true, message: '请选择上传文件类型!' }],
-            })(
-              <Select placeholder="请选择上传文件类型">
-                <Select.Option value="ctg-suit">ctg-suit</Select.Option>
-                <Select.Option value="pda">pda</Select.Option>
-              </Select>,
-            )}
-          </Form.Item>
-          <Form.Item label="URI">
-            {getFieldDecorator('uri', {
-              rules: [{ required: true, message: '请输入上传路径!' }],
-            })(<Input placeholder="请输入上传路径" />)}
-          </Form.Item>
-          <Form.Item label="简述">
-            {getFieldDecorator('description', {
-              rules: [{ required: true, message: '请输入简单的描述！' }],
-            })(<Input.TextArea rows={4} placeholder="请输入简单的描述..." />)}
-          </Form.Item>
-          <Form.Item label="选择文件">
-            {getFieldDecorator('file', {
-              rules: [{ required: true, message: '请选择上传文件！' }],
-            })(<OSSUpload />)}
-          </Form.Item>
-          <Form.Item label=" " colon={false}>
-            <Button type="primary" onClick={this.submit} loading={loading}>
-              上传
-            </Button>
-            <Button onClick={this.reset}>取消</Button>
-          </Form.Item>
-        </Form>
+        <div style={{ display: 'flex' }}>
+          <Form {...formItemLayout} layout="horizontal" className={styles.form}>
+            <Form.Item label="版本号">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, message: '请输入版本号!' }],
+              })(<Input placeholder="请输入版本号" />)}
+            </Form.Item>
+            <Form.Item label="安装包类型">
+              {getFieldDecorator('type', {
+                rules: [{ required: true, message: '请选择上传文件类型!' }],
+              })(
+                <Select placeholder="请选择上传文件类型">
+                  <Select.Option value="ctg-suit">ctg-suit</Select.Option>
+                  <Select.Option value="pda">pda</Select.Option>
+                </Select>,
+              )}
+            </Form.Item>
+            <Form.Item label="URI">
+              {getFieldDecorator('uri', {
+                rules: [{ required: true, message: '请输入上传路径!' }],
+              })(<Input placeholder="请输入上传路径" />)}
+            </Form.Item>
+            <Form.Item label="简述">
+              {getFieldDecorator('description', {
+                rules: [{ required: true, message: '请输入简单的描述！' }],
+              })(<Input.TextArea rows={4} placeholder="请输入简单的描述..." />)}
+            </Form.Item>
+            <Form.Item label="选择文件">
+              {getFieldDecorator('file', {
+                rules: [{ required: true, message: '请选择上传文件！' }],
+              })(<OSSUpload />)}
+            </Form.Item>
+            <Form.Item label=" " colon={false}>
+              <Button type="primary" onClick={this.submit} loading={loading}>
+                上传
+              </Button>
+              <Button onClick={this.reset}>取消</Button>
+            </Form.Item>
+          </Form>
+          <div className={styles.list}>
+            <p className={styles.title}>上传历史版本</p>
+            <div className={styles.content}>
+              <div>
+                <p>suit-ctg</p>
+                <ul>
+                  {historyList['ctg-suit'].map(e => (
+                    <li key={e.id}>{e.name}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p>pda</p>
+                <ul>
+                  {historyList['pda'].map(e => (
+                    <li key={e.id}>{e.name}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
