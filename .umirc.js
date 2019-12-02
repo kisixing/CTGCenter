@@ -64,13 +64,13 @@ export default {
               context: { title: '文件上传' },
             },
           ],
-          床位管理: [
+          bedinfo: [
             './src/pages/bed',
             {
               context: { title: '床位管理' },
             },
           ],
-          监护页: [
+          ctg: [
             './src/pages/ctg',
             {
               context: { title: '监护页' },

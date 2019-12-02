@@ -88,7 +88,7 @@ const EditableTable = (props: any) => {
         request.get(`/bedinfos`).then(d => setDd(d))
     }
     useLogin(fetchData)
-    
+
     const columns = [
         ...[
             {
@@ -99,7 +99,7 @@ const EditableTable = (props: any) => {
             {
                 title: '设备编号',
                 dataIndex: 'deviceno',
-                key: 'deviceno',
+                 key: 'deviceno',
             },
             {
                 title: '子机号',
@@ -112,19 +112,29 @@ const EditableTable = (props: any) => {
                 key: 'bedno',
             },
             {
-                title: '状态',
-                dataIndex: 'status',
-                key: 'status',
-                render: (text, record) => {
-                    return mapStatusToText[text];
-                },
+              title: '病区号',
+              dataIndex: 'areano',
+              key: 'areano',
             },
             {
-                title: '设备类型',
-                dataIndex: 'type',
-                key: 'type',
-                align: 'center',
+              title: '病区名',
+              dataIndex: 'areaname',
+              key: 'areaname',
             },
+            // {
+            //     title: '状态',
+            //     dataIndex: 'status',
+            //     key: 'status',
+            //     render: (text, record) => {
+            //         return mapStatusToText[text];
+            //     },
+            // },
+            // {
+            //     title: '设备类型',
+            //     dataIndex: 'type',
+            //     key: 'type',
+            //     align: 'center',
+            // },
         ].map(_ => ({ ..._, editable: true, align: 'center' })),
         {
             title: '操作',

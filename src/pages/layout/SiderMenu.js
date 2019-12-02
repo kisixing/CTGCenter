@@ -83,6 +83,22 @@ export class SiderMenu extends Component {
           <Icon type="upload" />
           <span>文件上传</span>
         </Menu.Item>
+        <Menu.Item
+          key="006"
+          title="床位管理"
+          href={`${origin}/bedinfo.html?auth_user=admin&auth_token=SLX9FT0`}
+        >
+          <Icon type="upload" />
+          <span>床位管理</span>
+        </Menu.Item>
+        <Menu.Item
+          key="007"
+          title="监护页"
+          href={`${origin}/ctg.html?auth_user=admin&auth_token=SLX9FT0`}
+        >
+          <Icon type="upload" />
+          <span>监护页</span>
+        </Menu.Item>
       </Menu>
     );
   }
