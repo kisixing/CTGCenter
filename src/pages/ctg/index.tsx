@@ -8,7 +8,7 @@ const baseURL = (window as any).CONFIG.baseURL;
 
 const App = (props) => {
     const host = '192.168.123.30' || new URL((window as any).CONFIG.baseURL).host
-    const [wsData, setWsData] = useState<any>({})
+    const [wsData, setWsData] = useState<any>(null)
     const [config, setConfig] = useState({
         bedname: '',
         age: null,
@@ -46,7 +46,8 @@ const App = (props) => {
         setConfig(data)
         const unitId = sp.get('unitId')
         const index = unitId.indexOf('-')
-        const ws = new WsService({ ws_url: sp.get('ws_url'), area_devices: unitId.slice(0, index < 0 ? undefined : index) }).on(EWsEvents.explode, data => setWsData(data.get(unitId) || {}))
+        const ws = new WsService({ ws_url: sp.get('ws_url'), area_devices: unitId.slice(0, index < 0 ? undefined : index) })
+            .on(EWsEvents.explode, data => setWsData({ ...(data.get(unitId) || {}) }))
         try {
             ws.connect().catch(err => {
                 console.log(err)
