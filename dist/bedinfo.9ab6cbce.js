@@ -689,7 +689,6 @@ var EditableTable = props => {
       return col;
     }
 
-    console.log('88888888888', col);
     return Object.assign({}, col, {
       onCell: record => ({
         record,

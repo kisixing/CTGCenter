@@ -225,7 +225,6 @@ const EditableTable = (props: any) => {
         if (!(col as any).editable) {
             return col;
         }
-        console.log('88888888888', col)
         return {
             ...col,
             onCell: record => ({
