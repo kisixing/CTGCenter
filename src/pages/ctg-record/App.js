@@ -63,11 +63,12 @@ class App extends Component {
   fetchList = () => {
     const _this = this;
     // 加载档案列表
+    const url_params = window.location.search.substr(1);
     request({
       method: 'get',
       headers: { Authorization: '' },
-      // url: `/prenatal-visits-encrypt?${url_params}`
-      url: '/prenatal-visitspage',
+      url: `/prenatal-visits-encrypt?${url_params}`
+      // url: '/prenatal-visitspage',
     })
       .then(function(response) {
         // handle success

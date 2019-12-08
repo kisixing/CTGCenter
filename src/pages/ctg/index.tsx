@@ -7,7 +7,7 @@ import { WsService, ICache, EWsEvents } from "@lianmed/lmg/lib/services/WsServic
 const baseURL = (window as any).CONFIG.baseURL;
 
 const App = (props) => {
-    const host = '192.168.123.30' || new URL((window as any).CONFIG.baseURL).host
+    const host = '192.168.123.10' || new URL((window as any).CONFIG.baseURL).host
     const [wsData, setWsData] = useState<any>(null)
     const [config, setConfig] = useState({
         bedname: '',

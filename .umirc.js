@@ -1,6 +1,9 @@
 
 // ref: https://umijs.org/config/
 export default {
+  history: 'hash',
+  // base: './',
+  publicPath: './',
   treeShaking: true,
   hash: true,
   plugins: [
@@ -80,6 +83,12 @@ export default {
             './src/pages/user-management',
             {
               context: { title: '用户管理' },
+            },
+          ],
+          dcms: [
+            './src/pages/unfinished-record',
+            {
+              context: { title: '未处理档案' },
             },
           ],
         },

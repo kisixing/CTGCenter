@@ -46,7 +46,7 @@ export class SiderMenu extends Component {
         <Menu.Item
           key="001"
           title="胎监档案"
-          href={`${origin}/ctg-record.html?auth_user=admin&auth_token=SLX9FT0&pregnancyId=8`}
+          href={`${origin}/ctg-record.html?appId=CkLRboUsAnlSHN3qdJYwk/Zpz9X+IkjQDhgwviLu1tFkP3YxfDc0AkmUzAW6bqzF&nonce=5bqe9xeTr0OeeZTdx5cdlH/jQ4SQ0WUmpn+j5cditM5ylfOnXO2WwHwiCnunGIAO&timestamp=bpXqcB+rZu4Ev6iZueSODQ==&sign=36B8CA9AFCD5530CBEBD334F92BCA62A&patId=xa9kqMDuP6/9kcm9lGUxBQ==`}
         >
           <Icon type="ordered-list" />
           <span>胎监档案</span>
@@ -102,6 +102,10 @@ export class SiderMenu extends Component {
         <Menu.Item key="008" title="用户管理" href={`${origin}/user-account.html`}>
           <Icon type="user" />
           <span>用户管理</span>
+        </Menu.Item>
+        <Menu.Item key="009" title="待处理档案管理" href={`${origin}/dcms.html`}>
+          <Icon type="user" />
+          <span>待处理档案管理</span>
         </Menu.Item>
       </Menu>
     );

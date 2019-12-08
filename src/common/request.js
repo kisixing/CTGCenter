@@ -37,7 +37,7 @@ instance.interceptors.response.use(
           break;
         case 401:
           error.message = '未授权，请重新登录或登录已过期，请重新登录！';
-          window.location.hash = "/login";  // token过期机制
+          // window.location.hash = "/login";  // token过期机制
           break;
         case 403:
           error.message = '拒绝访问';
