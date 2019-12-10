@@ -13,7 +13,9 @@ class SiderMenu extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ selectedKeys: [this.props.selected.id.toString()] });
+      this.setState({
+        selectedKeys: this.props.selected.id ? [this.props.selected.id.toString()] : []
+      });
     }, 600);
   }
 

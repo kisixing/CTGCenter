@@ -2,18 +2,26 @@ import axios from 'axios';
 import { notification } from 'antd';
 import { auth } from './utils';
 
+const AUTH_TOKEN = auth.get();
+const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
+
 const URL = window.CONFIG.baseURL;
 const instance = axios.create({
   baseURL: URL,
   timeout: 5000,
 });
 
+// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+
 // http request 拦截器
 instance.interceptors.request.use(
   function(config) {
+    const url = config.url.split('?')[0];
+
+    const isCarry = !NO_TOKEN_LIST.includes(url);
     config.headers = {
       'Content-Type': 'application/json;charset=UTF-8',
-      Authorization: auth.get(),
+      Authorization: isCarry ? AUTH_TOKEN : '',
     };
     return config;
   },
@@ -34,13 +42,23 @@ instance.interceptors.response.use(
       switch (error.response.status) {
         case 400:
           error.message = '请求错误';
+          const data = error.response.data;
+          if (data.errorKey === 'encrypterror') {
+            error.message = '请求错误，解密错误';
+          }
+          if (data.errorKey === 'PatIderror') {
+            error.message = '请求错误，该住院号不存在!';
+          }
+          if (data.errorKey === 'signerror') {
+            error.message = '校验和错误！';
+          }
           break;
         case 401:
-          error.message = '未授权，请重新登录或登录已过期，请重新登录！';
+          error.message = '401 未授权，请重新登录或登录已过期，请重新登录！';
           // window.location.hash = "/login";  // token过期机制
           break;
         case 403:
-          error.message = '拒绝访问';
+          error.message = '403 账户未授权，拒绝访问！';
           // window.location.hash = "/notAuth";
           break;
         case 404:
@@ -75,9 +93,10 @@ instance.interceptors.response.use(
           console.log(`连接错误${error.response.status}`);
       }
     } else {
-      console.log('连接到服务器失败');
+      // 跨域获取不到状态码后者其他状态码进行的处理
+      console.log('网络出现错误，连接到服务器失败，请稍后再试！');
     }
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       if (!loginTipLock) {
         //避免同时多个请求都返回401时，弹出多个“未登录”提示框
         loginTipLock = true;
@@ -92,10 +111,10 @@ instance.interceptors.response.use(
     } else {
       notification.error({
         message: '出错啦',
-        description: error.message,
+        description: `${error.message}`,
       });
     }
-    return Promise.resolve(error.response);
+    return Promise.resolve(error);
   },
 );
 

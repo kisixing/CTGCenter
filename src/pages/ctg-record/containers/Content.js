@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import { Button, Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as CTG } from '@lianmed/lmg';
-import request from '../utils/request';
+import request from '../../../common/request';
 import { transformsCTG } from '../utils'
 
 import PrintPreview from './PrintPreview';
@@ -41,13 +41,19 @@ export default class Content extends Component {
       request
         .get(`/ctg-exams-data/${docId}`)
         .then(function (response) {
-          console.log(response);
           const data = response.data;
-          const ctgData = transformsCTG(data.docid, response.data); // {}
-          _this.setState({
-            dataSource: ctgData,
-            loading: false
-          });
+          if (response && response.data) {
+            const ctgData = transformsCTG(data.docid, data); // {}
+            _this.setState({
+              dataSource: ctgData,
+              loading: false
+            });
+          } else {
+            _this.setState({
+              dataSource: null,
+              loading: false,
+            });
+          }
         })
         .catch(function (error) {
           console.log("/ctg-exams-data/docId", error);
@@ -56,7 +62,7 @@ export default class Content extends Component {
             loading: false
           });
         });
-    }, 1000);
+    }, 600);
   }
 
   showModal = e => {

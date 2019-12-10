@@ -1,8 +1,9 @@
 
-
-const prefix = (window as any).CONFIG.baseURL;
 import { Hooks } from "@lianmed/utils";
-const { useLogin } = Hooks
+const prefix = (window as any).CONFIG.baseURL;
+
+const { useLogin } = Hooks;
+
 export default (cb) => {
     const sp = new window.URL(location.href).searchParams
     const password = sp.get('password')

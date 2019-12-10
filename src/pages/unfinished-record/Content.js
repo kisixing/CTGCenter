@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Spin, Modal } from 'antd';
-import moment from 'moment';
+import { Button, Spin, Modal, notification } from 'antd';
 import { Ctg as CTG } from '@lianmed/lmg';
-import { getEmptyCacheItem} from '@lianmed/lmg/lib/services/utils';
 import request from '../../common/request';
 import { transformsCTG } from '../../common/utils';
 import styles from './Content.module.less';
@@ -40,24 +38,51 @@ class Content extends Component {
   }
 
   fetch = docId => {
+    // 获取ctg data详细数据
     const _this = this;
     _this.setState({ loading: true });
     setTimeout(() => {
       request
         .get(`/ctg-exams-data/${docId}`)
         .then(function(response) {
-          console.log(response);
           const data = response.data;
-          const ctgData = transformsCTG(data.docid, response.data); // {}
-          _this.setState({
-            dataSource: ctgData,
-            loading: false,
-          });
+          // if (data && data.errorKey) {
+          //   console.log('/prenatal-visits error', response.response);
+          //   let message = '';
+          //   if (data.errorKey === 'encypterror') {
+          //     message = '解密错误';
+          //   }
+          //   if (data.errorKey === 'PatIderror') {
+          //     message = '住院号不存在';
+          //   }
+          //   if (data.errorKey === 'signerror') {
+          //     message = '校验和错误';
+          //   }
+          //   notification.info({
+          //     message: '错误提示',
+          //     description: message,
+          //   });
+          //   return;
+          // }
+          if (!data.docid) {
+            notification.info({
+              message: '错误提示',
+              description: `不存在档案号为${docId}的数据！`,
+            });
+            _this.setState({ loading: false });
+          }
+          if (data && data.docid) {
+            const ctgData = transformsCTG(data.docid, response.data); // {}
+            _this.setState({
+              dataSource: ctgData,
+              loading: false,
+            });
+          }
         })
         .catch(function(error) {
           console.log('/ctg-exams-data/docId', error);
           _this.setState({
-            dataSource: null,
+            dataSource: init,
             loading: false,
           });
         });

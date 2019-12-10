@@ -33,7 +33,7 @@ class SiderMenu extends Component {
       >
         {dataSource.map(item => {
           return (
-            <Menu.Item key={item.id} data={item}>
+            <Menu.Item key={item.id} data={item} className={styles.item}>
               <div>{item.visitTime || item.visitDate}</div>
             </Menu.Item>
           );

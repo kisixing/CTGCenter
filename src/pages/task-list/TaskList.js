@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Badge, message } from 'antd';
+import { Button, message } from 'antd';
 import CustomTable from './CustomTable';
 import NewModal from './NewModal';
 import { getUrlParam, account, auth } from '../../common/utils';
@@ -47,7 +47,7 @@ class TaskLog extends Component {
       .get(api)
       .then(function(response) {
         const d = response.data;
-        console.log('object', d);
+        // console.log('object', d);
         _this.setState({ data: d });
       })
       .catch(function(error) {});
@@ -71,6 +71,17 @@ class TaskLog extends Component {
       if (values.fireTime) {
         values.fireTime = values.fireTime.format('YYYY-MM-DD HH:mm:ss');
       }
+      const newValues = {};
+      let arr = [];
+      Object.keys(values).forEach(function(key) {
+        console.log(key, values[key]);
+        if (key && key.includes('targetParams')) {
+          arr.push(values[key]);
+        } else {
+          newValues[key] = values[key];
+        }
+      });
+      newValues['targetParams'] = arr.join(',');
       if (values.id) {
         this.update(values);
       } else {
@@ -143,7 +154,7 @@ class TaskLog extends Component {
         if (statusText === 'OK') {
           _this.fetchPlans();
         }
-        console.log(`/plans/${id}/unschedule -->`, data);
+        // console.log(`/plans/${id}/unschedule -->`, data);
       })
       .catch(error => {});
   };
@@ -155,7 +166,7 @@ class TaskLog extends Component {
       .delete(`plans/${id}`)
       .then(response => {
         const d = response.data;
-        console.log(`plans/${id}-->`, d);
+        // console.log(`plans/${id}-->`, d);
         if (d.id) {
           _this.fetchPlans()
         }
@@ -168,7 +179,17 @@ class TaskLog extends Component {
     this.setState({
       visible: true,
       record,
+    }, () => {
+      const { form } = this.formRef.props;
+      const r = { ...record };
+      if (record.targetParams) {
+        // const P = '参数001,参数002,参数003';
+        const paramsArr = record.targetParams.split(',');
+        paramsArr.map((e, i) => (r[`targetParams${i + 1}`] = e));
+      }
+      form.setFieldsValue(r);
     });
+
   };
 
   render() {
@@ -187,15 +208,14 @@ class TaskLog extends Component {
           <Button type="primary" icon="plus" onClick={this.show}>
             新增任务
           </Button>
-          {visible ? (
-            <NewModal
-              wrappedComponentRef={form => (this.formRef = form)}
-              visible={visible}
-              onOk={this.handleCreate}
-              onCancel={this.onCancel}
-              initialValue={record}
-            />
-          ) : null}
+
+          <NewModal
+            wrappedComponentRef={form => (this.formRef = form)}
+            visible={visible}
+            onOk={this.handleCreate}
+            onCancel={this.onCancel}
+            initialValue={record}
+          />
         </div>
         <CustomTable {...tableProps} />
       </div>

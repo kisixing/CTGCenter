@@ -11,27 +11,12 @@ export class NewModal extends Component {
   state = {
     targetObject: [],
     targetMethod: [],
-    triggerType: 'RIGHTNOW'
-  }
+    triggerType: 'RIGHTNOW',
+    targetParams: [],
+  };
 
   componentDidMount() {
     this.fetchOptions();
-  }
-
-  initialValue = () => {
-    const { initialValue, form } = this.props;
-    if (initialValue) {
-      let { id, name, fireTime, cronExpression, description, strategy, triggerType, targetObject, targetMethod } = initialValue;
-      let init = { id, name, description, strategy, triggerType, targetObject, targetMethod };
-      if (triggerType === 'DELAY') {
-        fireTime = moment(initialValue.fireTime);
-        init = { id, name, description, strategy, triggerType, targetObject, targetMethod, fireTime };
-      }
-      if (triggerType === 'REGULAR') {
-        init = { id, name, description, strategy, triggerType, targetObject, targetMethod, cronExpression };
-      }
-      form.setFieldsValue({ ...init });
-    }
   }
 
   fetchOptions = () => {
@@ -44,8 +29,8 @@ export class NewModal extends Component {
         if (isJSON(d)) {
           let dd = [];
           Object.keys(d).forEach(e => {
-            dd.push(d[e])
-          })
+            dd.push(d[e]);
+          });
           d = dd;
         }
         const { initialValue } = _this.props;
@@ -54,12 +39,10 @@ export class NewModal extends Component {
           const s = d.filter(e => e.name === targetObject)[0];
           _this.setState({ targetMethod: s.methods, triggerType });
         }
-        _this.setState({ targetObject: d }, () => {
-          _this.initialValue();
-        });
+        _this.setState({ targetObject: d });
       })
       .catch(function(error) {});
-  }
+  };
 
   onSelect = (v, o) => {
     const { targetObject } = this.state;
@@ -68,18 +51,20 @@ export class NewModal extends Component {
     const targetMethod = s.methods;
     this.setState({ targetMethod });
     form.setFieldsValue({ targetMethod: '', description: '' });
-  }
+  };
 
   onSelect2 = (v, o) => {
     const { targetMethod } = this.state;
     const { form } = this.props;
     const s = targetMethod.filter(e => e.name === v)[0];
-    form.setFieldsValue({ description: s.description })
-  }
+    form.setFieldsValue({ description: s.description });
+    // 确定参数
+    this.setState({ targetParams: s.params });
+  };
 
   onSelect3 = (v, o) => {
     this.setState({ triggerType: v });
-  }
+  };
 
   renderTriggerType = () => {
     const { triggerType } = this.state;
@@ -110,11 +95,11 @@ export class NewModal extends Component {
     } else {
       return null;
     }
-  }
+  };
 
-  disabledDate = (current) => {
+  disabledDate = current => {
     return current && current < moment().endOf('day');
-  }
+  };
 
   disabledDateTime = () => {
     return {
@@ -122,7 +107,7 @@ export class NewModal extends Component {
       disabledMinutes: () => this.range(30, 60),
       disabledSeconds: () => [55, 56],
     };
-  }
+  };
 
   range = (start, end) => {
     const result = [];
@@ -130,10 +115,27 @@ export class NewModal extends Component {
       result.push(i);
     }
     return result;
-}
+  };
+
+  // 任务参数
+  renderTargetParams = (targetParams, form) => {
+    let dom = null;
+    if (targetParams.length) {
+      dom = targetParams.map((item, index) => {
+        return (
+          <Form.Item key={index} label={item.name}>
+            {form.getFieldDecorator(`targetParams${index + 1}`, {
+              initialValue: '',
+            })(<Input placeholder="请输入参数" />)}
+          </Form.Item>
+        );
+      });
+    }
+    return dom;
+  };
 
   render() {
-    const { targetObject, targetMethod, triggerType } = this.state;
+    const { targetObject, targetMethod, triggerType, targetParams } = this.state;
     const { onCancel, onOk, form, visible, initialValue } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -169,9 +171,8 @@ export class NewModal extends Component {
               rules: [{ required: true, message: '请选择一个任务对象!' }],
             })(
               <Select onSelect={this.onSelect}>
-                {targetObject.map(item => (
-                  <Option key={item.name}>{item.alias}</Option>
-                ))}
+                {targetObject &&
+                  targetObject.map(item => <Option key={item.name}>{item.alias}</Option>)}
               </Select>,
             )}
           </Form.Item>
@@ -180,12 +181,12 @@ export class NewModal extends Component {
               rules: [{ required: true, message: '请选择一个任务方法!' }],
             })(
               <Select onSelect={this.onSelect2}>
-                {targetMethod.map(item => (
-                  <Option key={item.name}>{item.alias}</Option>
-                ))}
+                {targetMethod &&
+                  targetMethod.map(item => <Option key={item.name}>{item.alias}</Option>)}
               </Select>,
             )}
           </Form.Item>
+          {this.renderTargetParams(targetParams, form)}
           <Form.Item label="任务描述">
             {getFieldDecorator('description', {
               initialValue: '',

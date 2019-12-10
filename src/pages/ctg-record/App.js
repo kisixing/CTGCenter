@@ -5,12 +5,14 @@ import moment from "moment";
 import request from "../../common/request";
 import { auth } from '../../common/utils';
 
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import SiderMenu from "./containers/SiderMenu";
 import Header from './containers/Header';
 import Content from './containers/Content';
 import PageLoading from './components/PageLoading';
 import styles from './App.less';
+
+const AUTH_TOKEN = auth.get();
 
 class App extends Component {
   constructor(props) {
@@ -25,19 +27,18 @@ class App extends Component {
 
   componentDidMount() {
     // TODO 设置固定账户密码，静默登录
-    if (!auth.get()) {
+    this.fetchList();
+    if (!AUTH_TOKEN) {
       this.fetchAuth();
     }
-    this.fetchList();
     // 组件专有request
     r.config({
-      Authorization: auth.get(),
+      Authorization: AUTH_TOKEN,
       prefix: window.CONFIG.baseURL,
     });
   }
 
   fetchAuth = () => {
-    const _this = this;
     const ACCOUNT = window.CONFIG.account;
     request
       .post("/authenticate", {
@@ -47,7 +48,8 @@ class App extends Component {
       .then(function(response) {
         const access_token = "Bearer " + response.data.id_token;
         sessionStorage.setItem("ACCESS_TOKEN", access_token);
-        _this.setState({ isLoading: false });
+        auth.set(response.data.id_token);
+        // _this.setState({ isLoading: false });
 
         r.config({
           Authorization: access_token,
@@ -61,29 +63,30 @@ class App extends Component {
 
   // TODO 11.12 档案列表请求方式
   fetchList = () => {
+    this.setState({ isLoading: true });
     const _this = this;
     // 加载档案列表
     const url_params = window.location.search.substr(1);
-    request({
-      method: 'get',
-      headers: { Authorization: '' },
-      url: `/prenatal-visits-encrypt?${url_params}`
-      // url: '/prenatal-visitspage',
-    })
+    request.get(`/prenatal-visits-encrypt?${url_params}`)
       .then(function(response) {
         // handle success
         const dataSource = response.data;
-        const newData = dataSource.map(e => {
-          return {
-            ...e,
-            visitTime: e.visitTime && moment(e.visitTime).format('YY/MM/DD HH:mm'),
-          };
-        });
-        _this.setState({
-          dataSource: newData,
-          pregnancy: newData[0].pregnancy,
-          isLoading: false,
-        });
+        if (response && response.data) {
+          const newData = dataSource.map(e => {
+            return {
+              ...e,
+              visitTime: e.visitTime && moment(e.visitTime).format('YY/MM/DD HH:mm'),
+            };
+          });
+          _this.setState({
+            dataSource: newData,
+            pregnancy: newData[0].pregnancy,
+            // isLoading: false,
+          });
+        }
+        setTimeout(() => {
+          _this.setState({ isLoading: false });
+        }, 600);
       })
       .catch(function(error) {
         // handle error

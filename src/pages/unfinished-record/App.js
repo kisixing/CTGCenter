@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import r from '@lianmed/request';
 import moment from 'moment';
 import SiderMenu from './SiderMenu';
@@ -23,6 +23,7 @@ class App extends Component {
       prefix: window.CONFIG.baseURL,
     });
     const _this = this;
+
     request
       .post('/authenticate', {
         username: 'admin',
@@ -65,7 +66,25 @@ class App extends Component {
       })
       .then(function(response) {
         const dataSource = response.data;
-        if (dataSource.length > 0) {
+        // if (dataSource && dataSource.errorKey) {
+        //   console.log('/prenatal-visits error', response.response);
+        //   let message = '';
+        //   if (dataSource.errorKey === 'encypterror') {
+        //     message = '解密错误';
+        //   }
+        //   if (dataSource.errorKey === 'PatIderror') {
+        //     message = '住院号不存在';
+        //   }
+        //   if (dataSource.errorKey === 'signerror') {
+        //     message = '校验和错误';
+        //   }
+        //   notification.info({
+        //     message: '错误提示',
+        //     description: message,
+        //   });
+        //   return;
+        // }
+        if (dataSource && dataSource.length > 0) {
           _this.setState({
             dataSource,
           });
@@ -75,7 +94,9 @@ class App extends Component {
           ++_this.index;
         }
       })
-      .catch(function(error) {});
+      .catch(function(error) {
+        console.log('/prenatal-visits error',);
+      });
   };
 
   setItem = item => {

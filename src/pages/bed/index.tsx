@@ -1,14 +1,8 @@
+import React, { useState, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-// import App from './ControlCenter';
-import React, { useState, useEffect } from 'react'
-
-import { Table, Input, Popconfirm, Form, Button, Select } from 'antd';
-// import { mapStatusToText } from '@/constant'
+import { Table, Input, Popconfirm, Form, Button, Select, message } from 'antd';
 import request from "@lianmed/request";
-// import { IBed } from '@/types'
-// import Subscribe from "./Subscribe";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-const prefix = (window as any).CONFIG.baseURL;
 import useLogin from "./useLogin";
 
 const mapStatusToText = {
@@ -16,10 +10,6 @@ const mapStatusToText = {
     2: '停止',
     3: '离线',
 };
-
-
-
-
 
 const EditableContext = React.createContext<WrappedFormUtils>(null);
 
@@ -95,31 +85,37 @@ const EditableTable = (props: any) => {
                 title: '名称',
                 dataIndex: 'bedname',
                 key: 'bedname',
+                width: 100
             },
             {
                 title: '设备编号',
                 dataIndex: 'deviceno',
-                 key: 'deviceno',
+                key: 'deviceno',
+                width: 100
             },
             {
                 title: '子机号',
                 dataIndex: 'subdevice',
                 key: 'subdevice',
+                width: 100
             },
             {
                 title: '床号',
                 dataIndex: 'bedno',
                 key: 'bedno',
+                width: 100
             },
             {
-              title: '病区号',
-              dataIndex: 'areano',
-              key: 'areano',
+                title: '病区号',
+                dataIndex: 'areano',
+                key: 'areano',
+                width: 100
             },
             {
-              title: '病区名',
-              dataIndex: 'areaname',
-              key: 'areaname',
+                title: '病区名',
+                dataIndex: 'areaname',
+                key: 'areaname',
+                width: 100
             },
             // {
             //     title: '状态',
@@ -139,8 +135,8 @@ const EditableTable = (props: any) => {
         {
             title: '操作',
             dataIndex: 'operation',
+            width: 200,
             render: (text, record) => {
-
                 const editable = isEditing(record);
                 return editable ? (
                     <span>
@@ -156,14 +152,15 @@ const EditableTable = (props: any) => {
                                </Button>
                             )}
                         </EditableContext.Consumer>
-                        <Popconfirm title="确认取消?" okText="是" cancelText="否" onConfirm={cancel}>
+                        <Popconfirm title="确认取消?" okText="确认" cancelText="取消" onConfirm={cancel}>
                             <Button size="small" type="link">
                                 取消
                             </Button>
                         </Popconfirm>
                     </span>
                 ) : (
-                        <Button
+                        <Fragment>
+                          <Button
                             size="small"
                             type="link"
                             disabled={editingKey !== ''}
@@ -171,6 +168,18 @@ const EditableTable = (props: any) => {
                         >
                             编辑
                         </Button>
+
+                        <Popconfirm
+                            title="确认取消?"
+                            okText="确认"
+                            cancelText="取消"
+                            onConfirm={() => deleted(record)}
+                        >
+                            <Button size="small" type="link">
+                                删除
+                            </Button>
+                        </Popconfirm>
+                        </Fragment>
                     );
             },
         },
@@ -202,7 +211,6 @@ const EditableTable = (props: any) => {
                 }).then(data => {
                     fetchData()
                     setEditingKey('')
-
                 })
 
             } else {
@@ -213,7 +221,16 @@ const EditableTable = (props: any) => {
         });
     }
 
-
+    const deleted = record => {
+      const { id, areaname,bedname } = record;
+        console.log('55555555555555', record)
+        request.delete(`/bedinfos/${id}`,)
+        .then(data => {
+            fetchData()
+            setEditingKey('')
+            message.info(`成功删除${areaname}病区d的${bedname}设备`)
+        })
+    };
 
     const components = {
         body: {
@@ -240,7 +257,7 @@ const EditableTable = (props: any) => {
     return (
         <EditableContext.Provider value={props.form}>
             <div style={{ padding: 20 }}>
-                <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>床位设置</p>
+                <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>床位管理</p>
                 <Table
                     size="small"
                     components={components}
