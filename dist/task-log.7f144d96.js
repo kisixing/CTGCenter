@@ -977,7 +977,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__("./node_modules/react-dom/index.js");
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
-// EXTERNAL MODULE: ./node_modules/antd/es/table/style/index.js + 4 modules
+// EXTERNAL MODULE: ./node_modules/antd/es/table/style/index.js + 3 modules
 var style = __webpack_require__("./node_modules/antd/es/table/style/index.js");
 
 // EXTERNAL MODULE: ./node_modules/antd/es/table/index.js + 27 modules
