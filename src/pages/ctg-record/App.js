@@ -67,6 +67,7 @@ class App extends Component {
     const _this = this;
     // 加载档案列表
     const url_params = window.location.search.substr(1);
+    console.log('555555555555', url_params);
     request.get(`/prenatal-visits-encrypt?${url_params}`)
       .then(function(response) {
         // handle success

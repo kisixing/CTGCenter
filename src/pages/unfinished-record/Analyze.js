@@ -20,7 +20,7 @@ class Analyze extends Component {
         visible={visible}
         onOk={handleOk}
         footer={false}
-        onCancel={handleCancel}
+        onCancel={() => handleCancel('analysisVisible')}
         width="98%"
         height="98%"
       >

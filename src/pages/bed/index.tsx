@@ -1,7 +1,8 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Input, Popconfirm, Form, Button, Select, message } from 'antd';
 import request from "@lianmed/request";
+import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import useLogin from "./useLogin";
 
@@ -15,7 +16,9 @@ const EditableContext = React.createContext<WrappedFormUtils>(null);
 
 class EditableCell extends React.Component<any, any> {
     getInput = () => {
-        if (this.props.inputType === 'number') {
+        console.log('object, this.props');
+        const { inputType, options } = this.props;
+        if (inputType === 'number') {
             return (
                 <Select>
                     {
@@ -30,7 +33,22 @@ class EditableCell extends React.Component<any, any> {
                 </Select>
             )
         }
-      return <Input disabled={this.props.disabled} />;
+        if (inputType === 'select') {
+            return (
+              <Select style={{ width: '100%' }}>
+                    {
+                        options.map(_ => {
+                            return (
+                                <Select.Option value={_.wardId} key={_.wardId}>
+                                    {_.wardId}
+                                </Select.Option >
+                            )
+                        })
+                    }
+                </Select>
+            )
+        }
+        return <Input disabled={this.props.disabled} />;
     };
 
     renderCell = ({ getFieldDecorator }) => {
@@ -41,6 +59,8 @@ class EditableCell extends React.Component<any, any> {
             inputType,
             record,
             index,
+            required,
+            disabled,
             children,
             ...restProps
         } = this.props;
@@ -51,8 +71,8 @@ class EditableCell extends React.Component<any, any> {
                         {getFieldDecorator(dataIndex, {
                             rules: [
                                 {
-                                    required: true,
-                                    message: `Please Input ${title}!`,
+                                    required: !disabled,
+                                    message: `请输入${title}!`,
                                 },
                             ],
                             initialValue: record[dataIndex],
@@ -72,10 +92,21 @@ class EditableCell extends React.Component<any, any> {
 
 const EditableTable = (props: any) => {
     const [dd, setDd] = useState(null)
-    const [editingKey, setEditingKey] = useState('')
+    const [editingKey, setEditingKey] = useState('');
+    const [options, setOptions] = useState([]);
+
+    // useEffect(() => {
+    //     // 使用浏览器的 API 更新页面标题
+    //     fetchOptions();
+    // });
+
+    const fetchOptions = () => {
+        request.get(`/wards`).then(d => setOptions(d))
+    };
 
     const fetchData = () => {
-        request.get(`/bedinfos`).then(d => setDd(d))
+      const params = stringify({ sort: 'deviceno,asc' });
+      request.get(`/bedinfos/?${params}`).then(d => setDd(d))
     }
     useLogin(fetchData)
 
@@ -111,16 +142,17 @@ const EditableTable = (props: any) => {
                 key: 'areano',
                 width: 100
             },
-            {
-                title: '病区名',
-                dataIndex: 'areaname',
-                key: 'areaname',
-                width: 100
-            },
+            // {
+            //     title: '病区名',
+            //     dataIndex: 'areaname',
+            //     key: 'areaname',
+            //     width: 100
+            // },
             // {
             //     title: '状态',
             //     dataIndex: 'status',
             //     key: 'status',
+            //     width: 100,
             //     render: (text, record) => {
             //         return mapStatusToText[text];
             //     },
@@ -130,7 +162,16 @@ const EditableTable = (props: any) => {
             //     dataIndex: 'type',
             //     key: 'type',
             //     align: 'center',
+            //     width: 100
             // },
+            {
+                title: '外借病区',
+                dataIndex: 'outWard',
+                key: 'outWard',
+                align: 'center',
+                width: 100,
+                render: text => text
+            },
         ].map(_ => ({ ..._, editable: true, align: 'center' })),
         {
             title: '操作',
@@ -164,7 +205,10 @@ const EditableTable = (props: any) => {
                             size="small"
                             type="link"
                             disabled={editingKey !== ''}
-                            onClick={() => setEditingKey(record.id)}
+                            onClick={() => {
+                              setEditingKey(record.id);
+                              fetchOptions()
+                            }}
                         >
                             编辑
                         </Button>
@@ -222,8 +266,8 @@ const EditableTable = (props: any) => {
     }
 
     const deleted = record => {
-      const { id, areaname,bedname } = record;
-        console.log('55555555555555', record)
+      const { id, areaname, bedname } = record;
+        // console.log('55555555555555', record)
         request.delete(`/bedinfos/${id}`,)
         .then(data => {
             fetchData()
@@ -242,15 +286,23 @@ const EditableTable = (props: any) => {
         if (!(col as any).editable) {
             return col;
         }
+        let inputType = 'text';
+        if (col.dataIndex === 'status') {
+            inputType = 'number';
+        }
+        if (col.dataIndex === 'areano') {
+            inputType = 'select';
+        }
         return {
             ...col,
             onCell: record => ({
                 record,
-                inputType: col.dataIndex === 'status' ? 'number' : 'text',
-                disabled: ['deviceno', 'subdevice', 'bedno'].includes(col.dataIndex) ? true :false,
+                inputType: inputType,
+                disabled: ['deviceno', 'subdevice', 'bedno', 'outWard'].includes(col.dataIndex) ? true :false,
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
+                options: options
             }),
         };
     });
@@ -277,9 +329,5 @@ const EditableTable = (props: any) => {
 }
 
 const EditableFormTable = Form.create()(EditableTable);
-
-
-
-
 
 ReactDOM.render(<EditableFormTable />, document.getElementById('root'));

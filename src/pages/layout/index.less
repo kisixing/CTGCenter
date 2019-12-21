@@ -6,14 +6,22 @@
 .header {
   padding: 0 24px;
   background-color: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+  z-index: 9;
 }
 
 .sider {
   background-color: #fff;
+
+  :global {
+    .ant-menu-root {
+      border-right: none;
+    }
+  }
 }
 
 .content {
-  padding: 24px;
+  padding: 12px;
 }
 
 .main {

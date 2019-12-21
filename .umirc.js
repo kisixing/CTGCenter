@@ -91,6 +91,24 @@ export default {
               context: { title: '未处理档案' },
             },
           ],
+          archives: [
+            './src/pages/archives-management',
+            {
+              context: { title: '档案管理' },
+            },
+          ],
+          groups: [
+            './src/pages/groups',
+            {
+              context: { title: '用户组管理' },
+            },
+          ],
+          wards: [
+            './src/pages/wards',
+            {
+              context: { title: '病区管理' },
+            },
+          ],
         },
         html: {
           template: './src/common/document.ejs',

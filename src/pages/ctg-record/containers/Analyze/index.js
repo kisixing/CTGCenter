@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
-
+import 'antd/es/input-number/style/css';
 import styles from "./index.module.less";
 import { Ctg_Analyse as Analyse } from "@lianmed/pages";
 class Analyze extends Component {
@@ -20,8 +20,9 @@ class Analyze extends Component {
         footer={false}
         onCancel={handleCancel}
         width="98%"
-        height="98%"
+        height="95%"
         wrapClassName={styles.modal}
+        maskClosable={false}
       >
         <Analyse docid={docId} />
       </Modal>

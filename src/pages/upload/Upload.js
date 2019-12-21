@@ -7,7 +7,7 @@
  *"enable": null
  */
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Checkbox, Button, message } from 'antd';
 import qs from 'qs';
 import request from '../../common/request';
 import OSSUpload from './OSSUpload';
@@ -71,7 +71,7 @@ class Upload extends Component {
           a.append(k, v);
           return a;
         }, fd);
-      // console.log('upload data', values, data);
+      console.log('upload data', values, data);
 
       request({
         method: 'POST',
@@ -126,6 +126,8 @@ class Upload extends Component {
                 <Select placeholder="请选择上传文件类型">
                   <Select.Option value="ctg-suit">ctg-suit</Select.Option>
                   <Select.Option value="pda">pda</Select.Option>
+                  <Select.Option value="device-fw">device-fw</Select.Option>
+                  <Select.Option value="device-setting">device-setting</Select.Option>
                 </Select>,
               )}
             </Form.Item>
@@ -139,10 +141,24 @@ class Upload extends Component {
                 rules: [{ required: true, message: '请输入简单的描述！' }],
               })(<Input.TextArea rows={4} placeholder="请输入简单的描述..." />)}
             </Form.Item>
-            <Form.Item label="选择文件">
+            {/* <Form.Item label="选择文件">
               {getFieldDecorator('file', {
                 rules: [{ required: true, message: '请选择上传文件！' }],
               })(<OSSUpload />)}
+            </Form.Item> */}
+            <Form.Item label="选择文件">
+              <div style={{ position: 'relative' }}>
+                <div style={{ display: 'inline-block' }}>
+                  {getFieldDecorator('file', {
+                    rules: [{ required: true, message: '请选择上传文件！' }],
+                  })(<OSSUpload />)}
+                </div>
+                <div style={{ position: 'absolute', top: 0, marginLeft: '186px' }}>
+                  {getFieldDecorator('enable', {
+                    valuePropName: 'checked',
+                  })(<Checkbox>强制升级</Checkbox>)}
+                </div>
+              </div>
             </Form.Item>
             <Form.Item label=" " colon={false}>
               <Button type="primary" onClick={this.submit} loading={loading}>

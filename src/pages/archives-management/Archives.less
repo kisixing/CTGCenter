@@ -1,0 +1,56 @@
+.wrapper {
+  height: 100%;
+
+  .searchForm {
+    height: 420px;
+    background-color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .chart {
+    padding: 6px 12px 12px 12px;
+    background-color: #fff;
+    overflow: hidden;
+  }
+}
+
+// react-pdf
+.react-pdf__Page {
+  display: inline-block;
+}
+
+:global {
+  .ant-modal {
+    padding-bottom: 0 !important;
+  }
+
+  .ant-modal-content {
+    height: 100% !important;
+  }
+
+  .ant-modal-header {
+    padding: 8px 12px !important;
+  }
+
+  .ant-modal-body {
+    height: calc(100% - 42px) !important;
+    padding: 12px !important;
+    background: #f0f2f5 !important;
+    overflow: auto;
+
+    .ant-input-number,
+    .ant-calendar-picker {
+      width: 100%;
+    }
+  }
+
+  .ant-modal-close-x {
+    height: 40px !important;
+    width: 40px !important;
+    line-height: 40px !important;
+  }
+
+  .react-pdf__Page__canvas {
+    display: inline-block !important;
+  }
+}

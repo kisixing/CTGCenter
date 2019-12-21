@@ -82,10 +82,11 @@ class TaskLog extends Component {
         }
       });
       newValues['targetParams'] = arr.join(',');
+      // console.log('8888888888888', values, newValues)
       if (values.id) {
-        this.update(values);
+        this.update(newValues);
       } else {
-        this.add(values);
+        this.add(newValues);
       }
       // console.log('Received values of form: ', JSON.stringify(values));
       form.resetFields();

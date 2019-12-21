@@ -72,7 +72,7 @@ class PrintPreview extends Component {
   };
 
   getPreviewData = () => {
-    const { pregnancy, ctgexam } = this.props.selected;
+    const { pregnancy = {}, ctgexam = {} } = this.props.selected;
     const starttime = ctgexam.startTime;
     const p = pregnancy;
     return {
@@ -87,7 +87,8 @@ class PrintPreview extends Component {
   };
 
   render() {
-    const { visible, handleOk, handleCancel, title, docId } = this.props;
+    const { visible, handleOk, handleCancel, title } = this.props;
+    console.log('988989898989898', this.getPreviewData());
     return (
       <Modal
         title={title}
@@ -96,9 +97,9 @@ class PrintPreview extends Component {
         maskClosable={false}
         footer={false}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => handleCancel('printVisible')}
         width="98%"
-        height="98%"
+        height="95%"
       >
         <Report onDownload={this.onDownload} {...this.getPreviewData()} print_interval={20} />
       </Modal>

@@ -107,6 +107,18 @@ export class SiderMenu extends Component {
           <Icon type="user" />
           <span>待处理档案管理</span>
         </Menu.Item>
+        <Menu.Item key="010" title="档案管理" href={`${origin}/archives.html`}>
+          <Icon type="file" />
+          <span>档案管理</span>
+        </Menu.Item>
+        <Menu.Item key="011" title="用户组管理" href={`${origin}/groups.html`}>
+          <Icon type="file" />
+          <span>用户组管理</span>
+        </Menu.Item>
+        <Menu.Item key="012" title="病区管理" href={`${origin}/wards.html`}>
+          <Icon type="file" />
+          <span>病区管理</span>
+        </Menu.Item>
       </Menu>
     );
   }

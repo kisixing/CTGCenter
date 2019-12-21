@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-
+import 'antd/es/input-number/style/css';
 import { Ctg_Report as Report } from "@lianmed/pages";
 import moment from 'moment'
 import { pdfjs } from "react-pdf";
@@ -72,7 +72,7 @@ class PrintPreview extends Component {
   }
 
   getPreviewData = () => {
-    const { pregnancy, ctgexam } = this.props.selected
+    const { pregnancy = {}, ctgexam = {} } = this.props.selected
     const starttime = ctgexam.startTime
     const p = pregnancy
     return {
@@ -93,6 +93,7 @@ class PrintPreview extends Component {
         title={title}
         centered
         visible={visible}
+        maskClosable={false}
         footer={false}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -100,7 +101,6 @@ class PrintPreview extends Component {
         height="98%"
       >
         <Report onDownload={this.onDownload} {...this.getPreviewData()} print_interval={20} />
-
       </Modal>
     );
   }

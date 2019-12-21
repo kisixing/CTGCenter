@@ -3,20 +3,25 @@
  * 就诊号、姓名、年龄、孕周、孕/产、医生
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import request from '../utils/request';
 import { getUrlParam } from "../utils";
 
 import styles from './Header.module.less';
 
-export default class Header extends Component {
+export default class Header extends PureComponent {
   static propTypes = {
     dataSource: PropTypes.object
   }
 0
   static defaultProps = {
     dataSource: {}
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {}
   }
 
   componentDidMount() {}

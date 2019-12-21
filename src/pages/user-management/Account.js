@@ -1,31 +1,61 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/**
- * 账户管理
+/*
+ * @Description: 账户管理
+ * @Author: Zhong Jun
+ * @Date: 2019-10-15 19:22:10
  */
 
 import React, { PureComponent } from 'react';
 import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
 import moment from 'moment';
-import request from '../../common/request';
+import { request } from '@lianmed/utils';
+import { auth } from '../../common/utils';
 
-import styles from './index.less';
+request.config({
+  Authorization: auth.get(),
+  prefix: window.CONFIG.baseURL,
+});
 
 class Account extends PureComponent {
   index = 0;
+
   cacheOriginData = {};
+
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
       data: [],
       values: [],
+      groups: [],
+      wards: [],
     };
     this.columns = [
       {
         title: '账号名称',
-        dataIndex: 'login',
-        key: 'login',
+        dataIndex: 'firstName',
+        key: 'id',
         width: 150,
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                autoFocus
+                onChange={e => this.handleFieldChange(e, 'firstName', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
+                placeholder="工号"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '工号',
+        dataIndex: 'login',
+        key: 'id',
+        width: 100,
         render: (text, record) => {
           if (record.editable) {
             return (
@@ -58,37 +88,113 @@ class Account extends PureComponent {
               />
             );
           }
-          return text;
+          return '********'; // text;
         },
       },
+      // {
+      //   title: '状态',
+      //   dataIndex: 'activated',
+      //   key: 'activated',
+      //   width: 140,
+      //   render: (text, record) => {
+      //     if (record.editable) {
+      //       return (
+      //         <Select
+      //           value={text}
+      //           style={{ width: 120 }}
+      //           onChange={e => this.handleFieldChange(e, 'activated', record.id)}
+      //           // onKeyPress={e => this.handleKeyPress(e, record.key)}
+      //           placeholder="账户状态"
+      //         >
+      //           <Select.Option value={true}>激活</Select.Option>
+      //           <Select.Option value={false}>停用</Select.Option>
+      //         </Select>
+      //       );
+      //     }
+      //     if (!text) {
+      //       return <Badge status="error" text="停用" />;
+      //     } else {
+      //       return <Badge status="success" text="激活" />;
+      //     }
+      //   },
+      // },
       {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        width: 140,
+        title: '用户组',
+        dataIndex: 'groups',
+        key: 'groups',
+        width: 150,
         render: (text, record) => {
           if (record.editable) {
+            const val = record['groups'].map(e => e && e.id);
+            const { groups } = this.state;
             return (
               <Select
-                value={text}
-                style={{ width: 120 }}
-                onChange={e => this.handleFieldChange(e, 'status', record.id)}
-                // onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="账户状态"
+                mode="multiple"
+                value={val}
+                style={{ width: 136 }}
+                // onFocus={this.fetchGroups}
+                onChange={e => {
+                  const { groups } = this.state;
+                  let selecteds = [];
+                  groups.map(a => {
+                    if (e.includes(a.id)) {
+                      selecteds.push(a);
+                    }
+                  });
+                  return this.handleFieldChange(selecteds, 'groups', record.id);
+                }}
+                placeholder="请选择用户组"
               >
-                <Select.Option value="0">停用</Select.Option>
-                <Select.Option value="1">激活</Select.Option>
-                <Select.Option value="2">注销</Select.Option>
+                {groups &&
+                  groups.length > 0 &&
+                  groups.map(e => {
+                    return <Select.Option value={e.id}>{e.nickname}</Select.Option>;
+                  })}
               </Select>
             );
           }
-          if (text === '0') {
-            return <Badge status="error" text="停用" />;
-          } else if (text === '1') {
-            return <Badge status="success" text="激活" />;
-          } else {
-            return <Badge status="default" text="注销" />;
+          const str = record['groups'].map(e => e && e.nickname);
+          return str.join(',');
+        },
+      },
+      {
+        title: '病区',
+        dataIndex: 'wards',
+        key: 'wards',
+        width: 150,
+        render: (text, record) => {
+          if (record.editable) {
+            const { wards } = this.state;
+            const val = record['wards'].map(e => e && e.id);
+            console.log('TCL666', val);
+            return (
+              <Select
+                mode="multiple"
+                value={val}
+                style={{ width: 136 }}
+                // onFocus={this.fetchWards}
+                onChange={e => {
+                  const { wards } = this.state;
+                  let selecteds = [];
+                  wards.map(a => {
+                    if (e.includes(a.id)) {
+                      selecteds.push(a);
+                    }
+                  });
+                  return this.handleFieldChange(selecteds, 'wards', record.id);
+                }}
+                placeholder="请选择病区"
+              >
+                {wards &&
+                  wards.length > 0 &&
+                  wards.map(e => {
+                    return <Select.Option value={e.id}>{e.wardName}</Select.Option>;
+                  })}
+              </Select>
+            );
           }
+          const str = record['wards'].map(e => e && e.wardName);
+          return str.join(',');
         },
       },
       {
@@ -102,15 +208,18 @@ class Account extends PureComponent {
         dataIndex: 'createdDate',
         key: 'createdDate',
         width: 150,
-        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
+        render: text => (text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : 'XXXX-XX-XX XX:XX'),
       },
-      {
-        title: '最近更新',
-        dataIndex: 'lastModifiedDate',
-        key: 'lastModifiedDate',
-        width: 150,
-        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
-      },
+      // {
+      //   title: '最近更新',
+      //   dataIndex: 'lastModifiedDate',
+      //   key: 'lastModifiedDate',
+      //   width: 150,
+      //   render: text =>
+      //     text
+      //       ? moment(text).format('YYYY-MM-DD HH:mm:ss')
+      //       : 'XXXX-XX-XX XX:XX',
+      // },
       {
         title: '操作',
         dataIndex: 'actions',
@@ -145,9 +254,8 @@ class Account extends PureComponent {
             let dom = null;
             if (!activated) {
               dom = <a onClick={() => this.start(id)}>启用</a>;
-            }
-            if (activated) {
-              dom = <a onClick={() => this.stop(id)}>停用</a>;
+            } else {
+              dom = <a>停用</a>;
             }
             return (
               <>
@@ -157,7 +265,12 @@ class Account extends PureComponent {
                 <Divider type="vertical" />
                 {dom}
                 <Divider type="vertical" />
-                <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
+                <Popconfirm
+                  title="确认删除该条信息？"
+                  okText="确定"
+                  cancelText="取消"
+                  onConfirm={() => this.deleted(record.id, record.login)}
+                >
                   <span className="delete-link">删除</span>
                 </Popconfirm>
               </>
@@ -169,23 +282,25 @@ class Account extends PureComponent {
   }
 
   componentDidMount() {
-    this.fetchAccountList();
+    this.fetchUsers();
   }
 
-  fetchAccountList = () => {
-    const _this = this;
+  // 获取全部账户信息
+  fetchUsers = () => {
+    this.setState({ loading: true });
     request
       .get('/users')
-      .then(function(response) {
-        const d = response.data;
-        console.log('object', d);
-        _this.setState({
-          data: d,
-          values: d,
+      .then(res => {
+        this.setState({ loading: false });
+        this.setState({
+          data: res,
+          values: res,
         });
       })
-      .catch(function(error) {});
-  }
+      .catch(err => {
+        this.setState({ loading: false });
+      });
+  };
 
   start = key => {
     console.log('TCL: Account -> key -> start', key);
@@ -205,42 +320,64 @@ class Account extends PureComponent {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
-    console.log('edit ', target, newData);
+    // 获取select options
+    this.fetchGroups();
+    this.fetchWards()
     if (target) {
       // 进入编辑状态时保存原始数据
       if (!target.editable) {
         this.cacheOriginData[key] = { ...target };
       }
       target.editable = !target.editable;
-
       this.setState({ data: newData });
     }
   };
 
   newAccount = () => {
     const { data } = this.state;
+    const account = JSON.parse(sessionStorage.getItem('ACCOUNT'));
     const newData = data.map(item => ({ ...item }));
     const date = moment();
     newData.push({
       id: `NEW_TEMP_ID_${this.index}`,
       login: '',
+      firstName: '',
       password: '',
-      status: '1',
-      createdBy: '',
+      activated: true,
+      createdBy: account.login,
       createdDate: date,
-      lastModifiedDate: date,
+      lastModifiedBy: date,
       editable: true,
       isNew: true,
+      groups: [],
+      wards: [],
     });
     this.index += 1;
     this.setState({ data: newData });
+    // 获取select options
+    this.fetchGroups();
+    this.fetchWards()
   };
 
-  remove(key) {
+  // 删除本地新增的
+  remove = key => {
     const { data } = this.state;
     const newData = data.filter(item => item.id !== key);
     this.setState({ data: newData });
-  }
+  };
+
+  // 实际删除后台的
+  deleted = (key, name) => {
+    request.delete(`/users/${name}`)
+      .then(res => {
+        // 更新本地信息
+        message.success(`删除用户${name}成功！`);
+        this.remove(key);
+      })
+      .catch(err => {
+        message.error(`删除用户${name}失败，请稍后再试！`);
+      });
+  };
 
   handleKeyPress(e, key) {
     if (e.key === 'Enter') {
@@ -251,7 +388,7 @@ class Account extends PureComponent {
   handleFieldChange(e, fieldName, key) {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
-    console.log('TCL: Account -> handleFieldChange -> newData', newData);
+    // console.log('TCL: Account -> handleFieldChange -> newData', e, fieldName, key, newData);
     const target = this.getRowByKey(key, newData);
     if (target) {
       const value = e.target ? e.target.value : e;
@@ -265,30 +402,60 @@ class Account extends PureComponent {
     this.setState({
       loading: true,
     });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      if (!target.password || !target.login || !target.status) {
-        message.error('请填写完整成员信息。');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      // const { data } = this.state;
-      // const { onChange } = this.props;
-      // onChange(data);
+    if (this.clickedCancel) {
+      this.clickedCancel = false;
+      return;
+    }
+    const target = this.getRowByKey(key) || {};
+    if (!target.firstName || !target.password || !target.login) {
+      message.error('请填写完整成员信息。');
+      e.target.focus();
       this.setState({
         loading: false,
       });
-    }, 500);
+      return;
+    }
+    delete target.isNew;
+    // console.log('TCL888', target);
+    this.toggleEditable(e, key);
+    const ID = target.id.toString();
+    if (ID.includes('NEW_TEMP_ID')) {
+      target.id = '';
+      this.create(target);
+    } else {
+      this.update(target);
+    }
+    this.setState({
+      loading: false,
+    });
   }
+
+  // 修改账户信息
+  update = params => {
+    request
+      .put('/users', {
+        data: params,
+      })
+      .then(res => {
+        message.success(`修改用户${params.login}成功！`);
+      })
+      .catch(err => {
+        message.error(`修改用户${params.login}失败，请稍后再试！`);
+      });
+  };
+
+  // 新增账户
+  create = params => {
+    request.post('/users', {
+      data: params
+    })
+      .then(res => {
+        message.success(`新增用户${params.login}成功！`);
+      })
+      .catch(err => {
+        message.error(`新增用户${params.login}失败，请稍后再试！`);
+      });
+  };
 
   cancel(e, key) {
     this.clickedCancel = true;
@@ -305,12 +472,30 @@ class Account extends PureComponent {
     this.clickedCancel = false;
   }
 
+  fetchWards = () => {
+    request.get('/wards').then(res => {
+      this.setState({ wards: res });
+    });
+  };
+
+  fetchGroups = () => {
+    request.get('/groups').then(res => {
+      this.setState({ groups: res });
+    });
+  };
+
   render() {
-    const { data } = this.state;
+    const { data, loading } = this.state;
     return (
-      <div className={styles.container}>
-        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>账户管理</p>
-        <Table size="small" rowKey="id" pagination={false} columns={this.columns} dataSource={data} />
+      <div style={{ padding: '12px' }}>
+        <p style={{ fontWeight: 600 }}>账户管理</p>
+        <Table
+          loading={loading}
+          size="small"
+          pagination={false}
+          columns={this.columns}
+          dataSource={data}
+        />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"

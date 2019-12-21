@@ -1,0 +1,38 @@
+.tableList {
+  height: 305px;
+  padding: 0 24px;
+  background: #fff;
+
+  :global {
+    .ant-table-placeholder {
+      height: 196px;
+    }
+
+    .ant-pagination {
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+  }
+
+  .selectedRow {
+    & > td {
+      background-color: #e6f7ff !important;
+    }
+  }
+}
+
+.buttonView {
+  margin: 18px;
+
+    button {
+      margin-right: 24px;
+    }
+}
+
+.textOver {
+  // display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
