@@ -6,7 +6,7 @@ const { useLogin } = Hooks;
 
 export default (cb) => {
     const sp = new window.URL(location.href).searchParams
-    const password = sp.get('password')
+    const password = sp.get('password') 
     const username = sp.get('username')
     let data: { password: string, username: string }
     if (password && username) {

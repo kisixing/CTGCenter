@@ -1,0 +1,110 @@
+.wrapper___3p4_P {
+  height: calc(100vh - 65px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.wrapper___3p4_P .item___qBIhq {
+  height: auto !important;
+  width: 100% !important;
+  line-height: 1.5;
+  margin-top: 0 !important;
+  margin-bottom: 4 !important;
+  padding-bottom: 5px;
+  padding: 6px 12px !important;
+  box-shadow: 1px 1px 4px #e8e8e8;
+}
+.wrapper___3p4_P .item___qBIhq:hover {
+  background: #e6f7ff;
+}
+
+.wrapper___xHRNK {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 113px);
+  padding: 24px;
+  background-color: #fff;
+}
+.wrapper___xHRNK .ctg___1H6qb {
+  height: 100%;
+}
+.wrapper___xHRNK .ctg___1H6qb .ant-spin-nested-loading {
+  height: calc(100% - 48px);
+}
+.wrapper___xHRNK .ctg___1H6qb .ant-spin-container {
+  height: 100%;
+}
+.wrapper___xHRNK .ctg___1H6qb .ant-spin {
+  max-height: none;
+}
+.wrapper___xHRNK .buttons___2DQ7U {
+  margin-top: 24px;
+  text-align: right;
+}
+.wrapper___xHRNK .buttons___2DQ7U button {
+  margin-left: 24px;
+}
+.title___3k3dS {
+  color: #666;
+  font-size: 14px;
+}
+.title___3k3dS .value___3wpcG {
+  margin-right: 12px;
+  color: #333;
+}
+.modal___nbPSF .ant-modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.modal___nbPSF .ant-modal-body {
+  flex: 1 1;
+}
+
+.app___3MTm2 {
+  text-align: center;
+}
+.app-wrapper___sHxLQ {
+  height: 100vh;
+}
+.header___32LBR {
+  padding: 0 24px;
+  background-color: #fff;
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 1px;
+  font-family: '\9ED1\4F53' -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.sider___2yMCG {
+  background-color: #FFF;
+}
+.content___10mGA {
+  padding: 24px;
+}
+.react-pdf__Page___3zc63 {
+  display: inline-block;
+}
+.ant-modal {
+  padding-bottom: 0 !important;
+}
+.ant-modal-content {
+  height: 100% !important;
+}
+.ant-modal-header {
+  padding: 8px 12px !important;
+}
+.ant-modal-body {
+  height: calc(100% - 55px) !important;
+  padding: 24px !important;
+  background: #f0f2f5 !important;
+  overflow: auto;
+}
+.ant-modal-close-x {
+  height: 40px !important;
+  width: 40px !important;
+  line-height: 40px !important;
+}
+.react-pdf__Page__canvas {
+  display: inline-block !important;
+}
+
