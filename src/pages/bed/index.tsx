@@ -4,6 +4,7 @@ import { Table, Input, Popconfirm, Form, Button, Select, message } from 'antd';
 import request from "@lianmed/request";
 import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";
+import SearchForm from './SearchForm';
 import useLogin from "./useLogin";
 
 const mapStatusToText = {
@@ -40,7 +41,7 @@ class EditableCell extends React.Component<any, any> {
                         options.map(_ => {
                             return (
                                 <Select.Option value={_.wardId} key={_.wardId}>
-                                    {_.wardId}
+                                    {_.wardName}
                                 </Select.Option >
                             )
                         })
@@ -104,8 +105,8 @@ const EditableTable = (props: any) => {
         request.get(`/wards`).then(d => setOptions(d))
     };
 
-    const fetchData = () => {
-      const params = stringify({ sort: 'deviceno,asc' });
+    const fetchData = (data = {}) => {
+      const params = stringify({ sort: 'deviceno,asc', ...data });
       request.get(`/bedinfos/?${params}`).then(d => setDd(d))
     }
     useLogin(fetchData)
@@ -140,7 +141,10 @@ const EditableTable = (props: any) => {
                 title: '病区号',
                 dataIndex: 'areano',
                 key: 'areano',
-                width: 100
+                width: 100,
+                render: (text, record) => {
+                  return record.areaname
+                }
             },
             // {
             //     title: '病区名',
@@ -238,6 +242,14 @@ const EditableTable = (props: any) => {
         setEditingKey('')
     };
 
+    const onSearch = (values) => {
+      const val = {
+        'deviceno.equals': values.deviceno ? values.deviceno : undefined,
+        'areano.equals': values.areano,
+      }
+      fetchData(val);
+    }
+
     const save = (form, id) => {
         form.validateFields((error, row) => {
             if (error) {
@@ -267,7 +279,6 @@ const EditableTable = (props: any) => {
 
     const deleted = record => {
       const { id, areaname, bedname } = record;
-        // console.log('55555555555555', record)
         request.delete(`/bedinfos/${id}`,)
         .then(data => {
             fetchData()
@@ -310,6 +321,7 @@ const EditableTable = (props: any) => {
         <EditableContext.Provider value={props.form}>
             <div style={{ padding: 20 }}>
                 <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>床位管理</p>
+                <SearchForm onSearch={onSearch} />
                 <Table
                     size="small"
                     components={components}

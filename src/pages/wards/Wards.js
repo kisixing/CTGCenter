@@ -15,76 +15,15 @@ class Wards extends Component {
     super(params);
     this.state = {
       dataSource: [],
+      bedinfos: [],
       visible: false,
       selected: {},
       loading: false,
     };
-    this.columns = [
-      {
-        title: '病区编号',
-        dataIndex: 'wardId',
-        key: 'wardId',
-        width: 100,
-      },
-      {
-        title: '病区名称',
-        dataIndex: 'wardName',
-        key: 'wardName',
-        width: 100,
-      },
-      {
-        title: '病区类型',
-        dataIndex: 'wardType',
-        key: 'wardType',
-        width: 100,
-        render: text => {
-          let t = '住院';
-          if (text === 'out') {
-            t = '门诊';
-          }
-          return t;
-        },
-      },
-      {
-        title: '绑定设备',
-        dataIndex: 'note',
-        key: 'note',
-        width: 200,
-        render: text => (
-          <Tooltip title={text}>
-            <div
-              style={{
-                display: 'inline-block',
-                width: '200px',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-all',
-              }}
-            >
-              {text}
-            </div>
-          </Tooltip>
-        ),
-      },
-      {
-        title: '操作',
-        key: 'action',
-        width: 100,
-        render: (text, record) => (
-          <span>
-            <a onClick={() => this.showEditWard(record)}>编辑</a>
-            <Divider type="vertical" />
-            <Popconfirm title="是否要删除此行？" onConfirm={() => this.deleteWard(record)}>
-              <a style={{ color: '#999' }}>删除</a>
-            </Popconfirm>
-          </span>
-        ),
-      },
-    ];
   }
 
   componentDidMount() {
+    this.fetcBeds();
     this.fetchWards();
   }
 
@@ -131,6 +70,12 @@ class Wards extends Component {
   fetchWards = () => {
     request.get('/wards').then(res => {
       this.setState({ dataSource: res });
+    });
+  };
+
+  fetcBeds = () => {
+    request.get('/bedinfos').then(res => {
+      this.setState({ bedinfos: res });
     });
   };
 
@@ -184,8 +129,92 @@ class Wards extends Component {
     });
   };
 
+  // 绑定的设备对应名称
+  noToName = (value)=> {
+    const beds = this.state.bedinfos;
+    let noArr = [];
+    let nameArr = [];
+    if (!value && beds.length > 0) {
+      return;
+    }
+
+    noArr = value.split(',');
+    for (let i = 0; i < noArr.length; i++) {
+      const no = noArr[i];
+      const element = beds.filter(e => e.deviceno === no)[0];
+      nameArr.push(element.bedname);
+    }
+    return nameArr.join(',')
+  }
+
   render() {
     const { dataSource, visible, selected, loading } = this.state;
+    const columns = [
+      {
+        title: '病区编号',
+        dataIndex: 'wardId',
+        key: 'wardId',
+        width: 100,
+      },
+      {
+        title: '病区名称',
+        dataIndex: 'wardName',
+        key: 'wardName',
+        width: 100,
+      },
+      {
+        title: '病区类型',
+        dataIndex: 'wardType',
+        key: 'wardType',
+        width: 100,
+        render: text => {
+          let t = '住院';
+          if (text === 'out') {
+            t = '门诊';
+          }
+          return t;
+        },
+      },
+      {
+        title: '绑定设备',
+        dataIndex: 'note',
+        key: 'note',
+        width: 200,
+        render: text => {
+          const tt = this.noToName(text);
+          return (
+            <Tooltip title={tt}>
+              <div
+                style={{
+                  display: 'inline-block',
+                  width: '200px',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  wordBreak: 'break-all',
+                }}
+              >
+                {tt}
+              </div>
+            </Tooltip>
+          );
+        },
+      },
+      {
+        title: '操作',
+        key: 'action',
+        width: 100,
+        render: (text, record) => (
+          <span>
+            <a onClick={() => this.showEditWard(record)}>编辑</a>
+            <Divider type="vertical" />
+            <Popconfirm title="是否要删除此行？" onConfirm={() => this.deleteWard(record)}>
+              <a style={{ color: '#999' }}>删除</a>
+            </Popconfirm>
+          </span>
+        ),
+      },
+    ];
     return (
       <Card
         title="病区管理"
@@ -205,7 +234,7 @@ class Wards extends Component {
       >
         <Table
           dataSource={dataSource}
-          columns={this.columns}
+          columns={columns}
           pagination={false}
           size="small"
           loading={loading}
