@@ -82,7 +82,8 @@ export default class Content extends Component {
   handleCancel = () => {
     this.setState({
       printVisible: false,
-      analyzeVisible: false
+      analyzeVisible: false,
+      reportVisible: false
     });
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Modal, Menu } from 'antd';
+import { Modal, Menu, Spin } from 'antd';
 import moment from 'moment';
 
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
@@ -28,16 +28,19 @@ function ReportPreview(props) {
       const obj = { key, value: reportObj[key] };
       arr.push(obj);
     }
+    arr.sort(compare('value'));
+    console.log('77777888888', arr);
     return arr[0]['key'];
   };
 
+  const [loading, setLoading] = useState(false);
   const [currentReport, setCurrentReport] = useState(getV());
   const [pdfBase64, setPdfBase64] = useState('');
   const inputEl = useRef(null);
   const [wh, setWh] = useState({ w: 0, h: 0 });
   useLayoutEffect(() => {
     const { clientHeight, clientWidth } = inputEl.current;
-    setWh({ h: clientHeight, w: clientWidth });
+    setWh({ h: clientHeight, w: clientWidth - 186 });
   }, []);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ function ReportPreview(props) {
   }, []);
 
   const fetchpdf = (value) => {
+    setLoading(true);
     request
       .get('/ctg-exams-pdf', {
         params: {
@@ -53,6 +57,7 @@ function ReportPreview(props) {
       })
       .then(({ pdfdata }) => {
         pdfdata && setPdfBase64(`data:application/pdf;base64,${pdfdata}`);
+        setLoading(false);
       });
   };
 
@@ -78,6 +83,16 @@ function ReportPreview(props) {
     gestationalWeek = '',
   } = props;
 
+  function compare(key) {
+    return function(value1, value2) {
+      const val1 = value1[key];
+      const val2 = value2[key];
+      const v1 = moment(val1).valueOf();
+      const v2 = moment(val2).valueOf();
+      return v2 - v1;
+    }
+  }
+
   return (
     <Modal
       maskClosable={false}
@@ -102,7 +117,7 @@ function ReportPreview(props) {
     >
       <div className={styles.modal_content} ref={inputEl}>
         <Menu
-          style={{ width: 176 }}
+          style={{ width: 186 }}
           defaultSelectedKeys={[currentReport]}
           theme="light"
           onClick={handleClick}
@@ -112,13 +127,23 @@ function ReportPreview(props) {
               return (
                 <Menu.Item key={e.key}>
                   <div>{e.key}</div>
-                  <div>{e.value}</div>
+                  {/* <div>{e.value}</div> */}
                 </Menu.Item>
               );
             })}
         </Menu>
         <div style={{ flex: 1 }}>
-          <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
+          <Spin
+            wrapperClassName={styles.chart}
+            spinning={loading}
+          >
+            <PreviewContent
+              pdfBase64={pdfBase64}
+              wh={wh}
+              isFull
+              borderd={false}
+            />
+          </Spin>
         </div>
       </div>
     </Modal>

@@ -46,7 +46,7 @@ export class SiderMenu extends Component {
         <Menu.Item
           key="001"
           title="胎监档案"
-          href={`${origin}/ctg-record.html?appId=CkLRboUsAnlSHN3qdJYwk/Zpz9X+IkjQDhgwviLu1tFkP3YxfDc0AkmUzAW6bqzF&nonce=5bqe9xeTr0OeeZTdx5cdlH/jQ4SQ0WUmpn+j5cditM5ylfOnXO2WwHwiCnunGIAO&timestamp=bpXqcB+rZu4Ev6iZueSODQ==&sign=36B8CA9AFCD5530CBEBD334F92BCA62A&patId=xa9kqMDuP6/9kcm9lGUxBQ==`}
+          href={`${origin}/ctg-record.html?appId=CkLRboUsAnlSHN3qdJYwk/Zpz9X+IkjQDhgwviLu1tFkP3YxfDc0AkmUzAW6bqzF&nonce=sVQyDzQFB3JZJNEZNNbaabenIQW00ITqv51MH373ICt85JjhJFnrvWYWoD+QkCap&timestamp=VuLR52iXroudCb0DJBNqIA==&sign=F468861FAFB0285A2F5883CEB6765DBE&patId=syZXb8RXLro8u4Atz8i6ww==`}
         >
           <Icon type="ordered-list" />
           <span>胎监档案</span>
