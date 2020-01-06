@@ -7,10 +7,11 @@ import { Button, Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as CTG } from '@lianmed/lmg';
 import request from '../../../common/request';
-import { transformsCTG } from '../utils'
+import { transformsCTG } from '../utils';
 
 import PrintPreview from './PrintPreview';
 import Analyze from './Analyze';
+import ReportPreview from '../../archives-management/ReportPreview';
 import styles from './Content.module.less';
 
 export default class Content extends Component {
@@ -21,6 +22,7 @@ export default class Content extends Component {
       dataSource: null,
       printVisible: false,
       analyzeVisible: false,
+      reportVisible: false,
       docId: ''
     }
   }
@@ -72,7 +74,9 @@ export default class Content extends Component {
       this.setState({ printVisible: true });
     } else if (id === 'analyze') {
       this.setState({ analyzeVisible: true });
-    } else { }
+    } else {
+      this.setState({ reportVisible: true })
+    }
   };
 
   handleCancel = () => {
@@ -112,10 +116,14 @@ export default class Content extends Component {
       loading,
       dataSource,
       printVisible,
-      analyzeVisible
+      analyzeVisible,
+      reportVisible,
     } = this.state;
-    const { selected } = this.props;
+    const { selected = {} } = this.props;
     const disabled = !(selected && selected.id);
+    const ctgexam = selected.ctgexam ? selected.ctgexam : {};
+    const hasSigned = !!ctgexam.report;
+    const signable = true || !!ctgexam.signable;
     return (
       <div className={styles.wrapper}>
         <div className={styles.ctg}>
@@ -127,9 +135,19 @@ export default class Content extends Component {
           <Button id="analyze" disabled={disabled} onClick={this.showModal}>
             分析
           </Button>
-          <Button id="print" disabled={disabled} onClick={this.showModal}>
+          {/* <Button id="print" disabled={disabled} onClick={this.showModal}>
             报告
-          </Button>
+          </Button> */}
+          {signable && (
+            <Button className="primary-link" disabled={disabled} onClick={this.showModal}>
+              {hasSigned ? '重新生成' : '报告生成'}
+            </Button>
+          )}
+          {hasSigned && (
+            <Button className="primary-link" onClick={this.showModal}>
+              查看
+            </Button>
+          )}
 
           {printVisible ? (
             <PrintPreview
@@ -148,6 +166,19 @@ export default class Content extends Component {
               dataSource={dataSource}
               title={this.renderTitle()}
               handleCancel={this.handleCancel}
+            />
+          ) : null}
+          {reportVisible ? (
+            <ReportPreview
+              visible={reportVisible}
+              onCancel={this.handleCancel}
+              docid={selected.ctgexam && selected.ctgexam.note}
+              report={selected.ctgexam && selected.ctgexam.report}
+              inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
+              name={selected.pregnancy && selected.pregnancy.name}
+              age={selected.pregnancy && selected.pregnancy.age}
+              startTime={selected.ctgexam && selected.ctgexam.startTime}
+              gestationalWeek={selected && selected.gestationalWeek}
             />
           ) : null}
         </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from "antd";
 import r from "@lianmed/request";
 import moment from "moment";
+import { parse, stringify } from 'qs';
 import request from "../../common/request";
 import { auth } from '../../common/utils';
 
@@ -67,8 +68,11 @@ class App extends Component {
     const _this = this;
     // 加载档案列表
     const url_params = window.location.search.substr(1);
-    console.log('555555555555', url_params);
-    request.get(`/prenatal-visits-encrypt?${url_params}`)
+    const params = parse(url_params);
+    const paramsStr = stringify(params);
+
+    request
+      .get(`/prenatal-visits-encrypt?${paramsStr}`)
       .then(function(response) {
         // handle success
         const dataSource = response.data;

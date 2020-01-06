@@ -7,14 +7,15 @@ import request from '../../common/request';
 import UpdateRecordModal from './UpdateModal';
 import PrintPreview from '../unfinished-record/PrintPreview';
 import Analysis from '../unfinished-record/Analyze';
+import ReportPreview from './ReportPreview';
 
 import styles from './TableList.less';
 
 // 默认时间
-const ENDTIME = moment().format('YYYY-MM-DD');
-const STARTTIME = moment()
-  .subtract(7, 'd')
-  .format('YYYY-MM-DD');
+// const ENDTIME = moment().format('YYYY-MM-DD');
+// const STARTTIME = moment()
+//   .subtract(7, 'd')
+//   .format('YYYY-MM-DD');
 
 class TableList extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class TableList extends Component {
       visible: false,
       printVisible: false,
       analysisVisible: false,
+      reportVisible: false,
       type: 'edit',
     };
     this.columns = [
@@ -30,7 +32,7 @@ class TableList extends Component {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
-        width: 150,
+        width: 120,
         ...this.getColumnSearchProps('name'),
       },
       {
@@ -68,7 +70,7 @@ class TableList extends Component {
         title: '日期',
         dataIndex: 'visitTime',
         key: 'visitTime',
-        width: 150,
+        width: 120,
         sorter: (a, b) => moment(a.visitTime) - moment(b.visitTime),
         render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
       },
@@ -76,7 +78,7 @@ class TableList extends Component {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
-        width: 100,
+        width: 68,
         render: (text, record) => {
           if (record.pregnancy) {
             return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
@@ -88,7 +90,7 @@ class TableList extends Component {
         title: '档案号',
         dataIndex: 'comment',
         key: 'comment',
-        width: 180,
+        width: 150,
         align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
@@ -97,14 +99,29 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 200,
+        width: 220,
         render: (text, record) => {
+          const ctgexam = record.ctgexam;
+          const hasSigned = !!ctgexam.report;
+          const signable = !!ctgexam.signable;
           return (
             <span>
-              <a className="primary-link" onClick={e => this.showPrint(e, record)}>
-                报告
-              </a>
-              <Divider type="vertical" />
+              {signable && (
+                <>
+                  <a className="primary-link" onClick={e => this.showPrint(e, record)}>
+                    {hasSigned ? '重新生成' : '报告生成'}
+                  </a>
+                  <Divider type="vertical" />
+                </>
+              )}
+              {hasSigned && (
+                <>
+                  <a className="primary-link" onClick={e => this.showReport(e, record)}>
+                    查看
+                  </a>
+                  <Divider type="vertical" />
+                </>
+              )}
               <a className="primary-link" onClick={e => this.showAnalysis(e, record)}>
                 分析
               </a>
@@ -142,17 +159,25 @@ class TableList extends Component {
     this.handleRow(record);
   };
 
+  showReport = (e, record) => {
+    e.stopPropagation();
+    this.setState({ current: record }, () => {
+      this.setState({ reportVisible: true });
+      this.handleRow(record);
+    });
+  };
+
   showAnalysis = (e, record) => {
     e.stopPropagation();
     this.setState({ analysisVisible: true });
     this.handleRow(record);
   };
 
-  handleCancel = key => {
-    this.setState({
-      [key]: false,
-    });
-  };
+  // handleCancel = key => {
+  //   this.setState({
+  //     [key]: false,
+  //   });
+  // };
 
   saveFormRef = formRef => {
     this.formRef = formRef;
@@ -288,7 +313,7 @@ class TableList extends Component {
     }
     const params = {
       startTime,
-      endTime
+      endTime,
     };
     return params;
   };
@@ -298,25 +323,26 @@ class TableList extends Component {
       visible: false,
       printVisible: false,
       analysisVisible: false,
+      reportVisible: false,
     });
   };
 
-  handleUpdate = (values) => {
+  handleUpdate = values => {
     request
       .put('/prenatal-visits', {
         ...values,
       })
       .then(res => {
-        const data = res.data;
+        // const data = res.data;
         if (res.status === 200) {
-          message.info('修改档案成功！')
+          message.info('修改档案成功！');
         } else {
-          message.error('修改档案失败！')
+          message.error('修改档案失败！');
         }
       });
   };
 
-  deleted = (id) => {
+  deleted = id => {
     const { getRecords } = this.props;
     request.delete(`/prenatal-visits/${id}`).then(res => {
       if (res.status === 200) {
@@ -327,7 +353,7 @@ class TableList extends Component {
         message.error('档案删除失败！');
       }
     });
-  }
+  };
 
   render() {
     const {
@@ -337,14 +363,14 @@ class TableList extends Component {
       loading,
       pagination: { size, page },
     } = this.props;
-    const { visible, printVisible, analysisVisible, type } = this.state;
+    const { visible, printVisible, analysisVisible, reportVisible, type } = this.state;
 
     return (
       <div className={styles.tableList}>
         <Table
           bordered
           size="small"
-          scroll={{ x: 1250, y: 274 }}
+          scroll={{ x: 1360, y: 274 }}
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
@@ -414,6 +440,19 @@ class TableList extends Component {
             onCancel={this.handleCancel}
             onOk={this.handleUpdate}
             dataSource={selected}
+          />
+        ) : null}
+        {reportVisible ? (
+          <ReportPreview
+            visible={reportVisible}
+            onCancel={this.handleCancel}
+            docid={selected.ctgexam && selected.ctgexam.note}
+            report={selected.ctgexam && selected.ctgexam.report}
+            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
+            name={selected.pregnancy && selected.pregnancy.name}
+            age={selected.pregnancy && selected.pregnancy.age}
+            startTime={selected.ctgexam && selected.ctgexam.startTime}
+            gestationalWeek={selected && selected.gestationalWeek}
           />
         ) : null}
       </div>
