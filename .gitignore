@@ -13,3 +13,6 @@
 # umi
 .umi
 .umi-production
+/dist
+*.zip
+*.7z
