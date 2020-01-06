@@ -1,3 +1,8 @@
+/**
+ * 先获取病区详情，以便显示病区名称
+ */
+
+
 import React, { useState, useEffect, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Input, Popconfirm, Form, Button, Select, message } from 'antd';
@@ -6,50 +11,50 @@ import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import SearchForm from './SearchForm';
 import useLogin from "./useLogin";
+import { auth } from '../../common/utils';
 
 const mapStatusToText = {
     1: '工作中',
     2: '停止',
     3: '离线',
 };
+request.config({
+  Authorization: auth.get(),
+  prefix: window.CONFIG.baseURL,
+});
 
 const EditableContext = React.createContext<WrappedFormUtils>(null);
 
 class EditableCell extends React.Component<any, any> {
     getInput = () => {
-        console.log('object, this.props');
-        const { inputType, options } = this.props;
-        if (inputType === 'number') {
-            return (
-                <Select>
-                    {
-                        Object.entries(mapStatusToText).map(_ => {
-                            return (
-                                <Select.Option value={_[0]} key={_[0]}>
-                                    {_[1]}
-                                </Select.Option >
-                            )
-                        })
-                    }
-                </Select>
-            )
-        }
-        if (inputType === 'select') {
-            return (
-              <Select style={{ width: '100%' }}>
-                    {
-                        options.map(_ => {
-                            return (
-                                <Select.Option value={_.wardId} key={_.wardId}>
-                                    {_.wardName}
-                                </Select.Option >
-                            )
-                        })
-                    }
-                </Select>
-            )
-        }
-        return <Input disabled={this.props.disabled} />;
+      const { inputType, options } = this.props;
+      if (inputType === 'number') {
+          return (
+            <Select disabled={this.props.disabled}>
+              {Object.entries(mapStatusToText).map(_ => {
+                return (
+                  <Select.Option value={_[0]} key={_[0]}>
+                    {_[1]}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          );
+      }
+      if (inputType === 'select') {
+          return (
+            <Select disabled={this.props.disabled} style={{ width: '100%' }}>
+              {options.map(_ => {
+                return (
+                  <Select.Option value={_.wardId} key={_.wardId}>
+                    {_.wardName}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          );
+      }
+      return <Input disabled={this.props.disabled} />;
     };
 
     renderCell = ({ getFieldDecorator }) => {
@@ -96,13 +101,13 @@ const EditableTable = (props: any) => {
     const [editingKey, setEditingKey] = useState('');
     const [options, setOptions] = useState([]);
 
-    // useEffect(() => {
-    //     // 使用浏览器的 API 更新页面标题
-    //     fetchOptions();
-    // });
+    useEffect(() => {
+        // 获取病区详细列表
+        fetchOptions();
+    }, []);
 
     const fetchOptions = () => {
-        request.get(`/wards`).then(d => setOptions(d))
+        request.get('/wards').then(d => setOptions(d));
     };
 
     const fetchData = (data = {}) => {
@@ -112,134 +117,152 @@ const EditableTable = (props: any) => {
     useLogin(fetchData)
 
     const columns = [
-        ...[
-            {
-                title: '名称',
-                dataIndex: 'bedname',
-                key: 'bedname',
-                width: 100
-            },
-            {
-                title: '设备编号',
-                dataIndex: 'deviceno',
-                key: 'deviceno',
-                width: 100
-            },
-            {
-                title: '子机号',
-                dataIndex: 'subdevice',
-                key: 'subdevice',
-                width: 100
-            },
-            {
-                title: '床号',
-                dataIndex: 'bedno',
-                key: 'bedno',
-                width: 100
-            },
-            {
-                title: '病区号',
-                dataIndex: 'areano',
-                key: 'areano',
-                width: 100,
-                render: (text, record) => {
-                  return record.areaname
-                }
-            },
-            // {
-            //     title: '病区名',
-            //     dataIndex: 'areaname',
-            //     key: 'areaname',
-            //     width: 100
-            // },
-            // {
-            //     title: '状态',
-            //     dataIndex: 'status',
-            //     key: 'status',
-            //     width: 100,
-            //     render: (text, record) => {
-            //         return mapStatusToText[text];
-            //     },
-            // },
-            // {
-            //     title: '设备类型',
-            //     dataIndex: 'type',
-            //     key: 'type',
-            //     align: 'center',
-            //     width: 100
-            // },
-            {
-                title: '外借病区',
-                dataIndex: 'outWard',
-                key: 'outWard',
-                align: 'center',
-                width: 100,
-                render: text => text
-            },
-        ].map(_ => ({ ..._, editable: true, align: 'center' })),
+      ...[
         {
-            title: '操作',
-            dataIndex: 'operation',
-            width: 200,
-            render: (text, record) => {
-                const editable = isEditing(record);
-                return editable ? (
-                    <span>
-                        <EditableContext.Consumer>
-                            {form => (
-                                <Button
-                                    size="small"
-                                    type="link"
-                                    onClick={() => save(form, record.id)}
-                                    style={{ marginRight: 8 }}
-                                >
-                                    保存
-                               </Button>
-                            )}
-                        </EditableContext.Consumer>
-                        <Popconfirm title="确认取消?" okText="确认" cancelText="取消" onConfirm={cancel}>
-                            <Button size="small" type="link">
-                                取消
-                            </Button>
-                        </Popconfirm>
-                    </span>
-                ) : (
-                        <Fragment>
-                          <Button
-                            size="small"
-                            type="link"
-                            disabled={editingKey !== ''}
-                            onClick={() => {
-                              setEditingKey(record.id);
-                              fetchOptions()
-                            }}
-                        >
-                            编辑
-                        </Button>
-
-                        <Popconfirm
-                            title="确认取消?"
-                            okText="确认"
-                            cancelText="取消"
-                            onConfirm={() => deleted(record)}
-                        >
-                            <Button size="small" type="link">
-                                删除
-                            </Button>
-                        </Popconfirm>
-                        </Fragment>
-                    );
-            },
+          title: '名称',
+          dataIndex: 'bedname',
+          key: 'bedname',
+          width: 100,
         },
-    ]
+        {
+          title: '设备编号',
+          dataIndex: 'deviceno',
+          key: 'deviceno',
+          width: 100,
+        },
+        {
+          title: '子机号',
+          dataIndex: 'subdevice',
+          key: 'subdevice',
+          width: 100,
+        },
+        // {
+        //     title: '床号',
+        //     dataIndex: 'bedno',
+        //     key: 'bedno',
+        //     width: 100
+        // },
+        {
+          title: '病区',
+          dataIndex: 'areano',
+          key: 'areano',
+          width: 100,
+          render: (text: string, record: object) => {
+            if (!text) {
+              return null;
+            }
+            let t = '';
+            const current = options.filter(e => e.wardId === text);
+            if (current) {
+              t = current[0]['wardName'];
+            }
+            return t;
+          },
+        },
+        // {
+        //     title: '病区名',
+        //     dataIndex: 'areaname',
+        //     key: 'areaname',
+        //     width: 100
+        // },
+        // {
+        //     title: '状态',
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     width: 100,
+        //     render: (text, record) => {
+        //         return mapStatusToText[text];
+        //     },
+        // },
+        // {
+        //     title: '设备类型',
+        //     dataIndex: 'type',
+        //     key: 'type',
+        //     align: 'center',
+        //     width: 100
+        // },
+        {
+          title: '外借病区',
+          dataIndex: 'outWard',
+          key: 'outWard',
+          align: 'center',
+          width: 100,
+          render: text => {
+            if (!text) {
+              return null;
+            }
+            let t = '';
+            const current = options.filter(e => e.wardId === text);
+            if (current) {
+              t = current[0]['wardName'];
+            }
+            return t;
+          },
+        },
+      ].map(_ => ({ ..._, editable: true, align: 'center' })),
+      {
+        title: '操作',
+        dataIndex: 'operation',
+        width: 200,
+        render: (text, record) => {
+          const editable = isEditing(record);
+          return editable ? (
+            <span>
+              <EditableContext.Consumer>
+                {form => (
+                  <Button
+                    size="small"
+                    type="link"
+                    onClick={() => save(form, record.id)}
+                    style={{ marginRight: 8 }}
+                  >
+                    保存
+                  </Button>
+                )}
+              </EditableContext.Consumer>
+              <Popconfirm title="确认取消?" okText="确认" cancelText="取消" onConfirm={cancel}>
+                <Button size="small" type="link">
+                  取消
+                </Button>
+              </Popconfirm>
+            </span>
+          ) : (
+            <Fragment>
+              <Button
+                size="small"
+                type="link"
+                disabled={editingKey !== ''}
+                onClick={() => {
+                  setEditingKey(record.id);
+                  // fetchOptions()
+                }}
+              >
+                编辑
+              </Button>
+
+              <Popconfirm
+                title="确认取消?"
+                okText="确认"
+                cancelText="取消"
+                onConfirm={() => deleted(record)}
+              >
+                <Button size="small" type="link">
+                  删除
+                </Button>
+              </Popconfirm>
+            </Fragment>
+          );
+        },
+      },
+    ];
 
     const isEditing = record => {
-        const status = record.id === editingKey;
-        return status
+      const status = record.id === editingKey;
+      return status
     }
 
     const cancel = () => {
-        setEditingKey('')
+      setEditingKey('')
     };
 
     const onSearch = (values) => {
@@ -250,24 +273,32 @@ const EditableTable = (props: any) => {
       fetchData(val);
     }
 
-    const save = (form, id) => {
+    const save = (form: any, id: string) => {
         form.validateFields((error, row) => {
             if (error) {
                 return;
             }
             const newData = [...dd];
-            const index = newData.findIndex(item => id === item.id);
+            const index = newData.findIndex(item => item.id === id);
+            // 更新病区名
+            const areaNO = newData[index]['areano'];
+            const pos = options.findIndex(item => item.wardId === areaNO);
+            const currentWard = options[pos];
+            console.log('TCL8888', newData[index], options, currentWard);
             if (index > -1) {
 
-                request.put('/bedinfos', {
+                request
+                  .put('/bedinfos', {
                     data: {
-                        ...newData[index],
-                        ...row,
-                    }
-                }).then(data => {
-                    fetchData()
-                    setEditingKey('')
-                })
+                      ...newData[index],
+                      ...row,
+                      areaname: currentWard.wardName,
+                    },
+                  })
+                  .then(data => {
+                    fetchData();
+                    setEditingKey('');
+                  });
 
             } else {
                 newData.push(row);
@@ -301,8 +332,8 @@ const EditableTable = (props: any) => {
         if (col.dataIndex === 'status') {
             inputType = 'number';
         }
-        if (col.dataIndex === 'areano') {
-            inputType = 'select';
+        if (col.dataIndex === 'areano' || col.dataIndex === 'outWard') {
+          inputType = 'select';
         }
         return {
             ...col,

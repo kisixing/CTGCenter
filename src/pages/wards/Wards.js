@@ -63,7 +63,7 @@ class Wards extends Component {
         this.fetchWards();
       })
       .catch(err => {
-        message.error(`病区${record.wardName}删除失败，请稍后再试！`);
+        message.error(`病区${record.wardName}删除失败，可能有用户已经绑定该病区。如需删除请先确保该病区无用户绑定。`);
       });
   };
 
@@ -142,7 +142,9 @@ class Wards extends Component {
     for (let i = 0; i < noArr.length; i++) {
       const no = noArr[i];
       const element = beds.filter(e => e.deviceno === no)[0];
-      nameArr.push(element.bedname);
+      if (element && element.bedname) {
+        nameArr.push(element.bedname);
+      }
     }
     return nameArr.join(',')
   }
@@ -208,7 +210,12 @@ class Wards extends Component {
           <span>
             <a onClick={() => this.showEditWard(record)}>编辑</a>
             <Divider type="vertical" />
-            <Popconfirm title="是否要删除此行？" onConfirm={() => this.deleteWard(record)}>
+            <Popconfirm
+              okText="确定"
+              cancelText="取消"
+              title="是否要删除此行？"
+              onConfirm={() => this.deleteWard(record)}
+            >
               <a style={{ color: '#999' }}>删除</a>
             </Popconfirm>
           </span>

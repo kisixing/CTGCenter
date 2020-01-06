@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Modal } from 'antd';
 import 'antd/es/input-number/style/css';
 
-import styles from './Analyze.less';
-
 import { Ctg_Analyse as Analyse } from '@lianmed/pages';
 class Analyze extends Component {
   constructor(props) {

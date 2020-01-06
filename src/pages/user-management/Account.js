@@ -44,7 +44,7 @@ class Account extends PureComponent {
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'firstName', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
-                placeholder="工号"
+                placeholder="输入账号名称"
               />
             );
           }
@@ -64,7 +64,7 @@ class Account extends PureComponent {
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'login', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
-                placeholder="账号名称"
+                placeholder="输入工号"
               />
             );
           }
@@ -78,8 +78,10 @@ class Account extends PureComponent {
         width: 150,
         render: (text, record) => {
           if (record.editable) {
+            const isNew = record.isNew;
             return (
               <Input.Password
+                disabled={!isNew}
                 value={text}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'password', record.id)}
@@ -259,9 +261,9 @@ class Account extends PureComponent {
             }
             return (
               <>
-                <span className="primary-link" onClick={e => this.toggleEditable(e, record.id)}>
+                <a className="primary-link" onClick={e => this.toggleEditable(e, record.id)}>
                   编辑
-                </span>
+                </a>
                 <Divider type="vertical" />
                 {dom}
                 <Divider type="vertical" />
@@ -271,7 +273,7 @@ class Account extends PureComponent {
                   cancelText="取消"
                   onConfirm={() => this.deleted(record.id, record.login)}
                 >
-                  <span className="delete-link">删除</span>
+                  <a className="delete-link">删除</a>
                 </Popconfirm>
               </>
             );
@@ -407,7 +409,7 @@ class Account extends PureComponent {
       return;
     }
     const target = this.getRowByKey(key) || {};
-    if (!target.firstName || !target.password || !target.login) {
+    if (!target.firstName || !target.login) {
       message.error('请填写完整成员信息。');
       e.target.focus();
       this.setState({
@@ -451,6 +453,7 @@ class Account extends PureComponent {
     })
       .then(res => {
         message.success(`新增用户${params.login}成功！`);
+        this.fetchUsers()
       })
       .catch(err => {
         message.error(`新增用户${params.login}失败，请稍后再试！`);
