@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from "antd";
 import r from "@lianmed/request";
+import { event } from '@lianmed/utils';
 import moment from "moment";
 import { parse, stringify } from 'qs';
 import request from "../../common/request";
@@ -37,6 +38,8 @@ class App extends Component {
       Authorization: AUTH_TOKEN,
       prefix: window.CONFIG.baseURL,
     });
+
+    event.on('signed', this.fetchList);
   }
 
   fetchAuth = () => {
@@ -66,6 +69,7 @@ class App extends Component {
   fetchList = () => {
     this.setState({ isLoading: true });
     const _this = this;
+    const { selected } = this.state;
     // 加载档案列表
     const url_params = window.location.search.substr(1);
     const params = parse(url_params);
@@ -83,9 +87,17 @@ class App extends Component {
               visitTime: e.visitTime && moment(e.visitTime).format('YY/MM/DD HH:mm'),
             };
           });
+          // 初始化，区第一个item, 其他根据已经选择的selected更新
+          let select = {};
+          if (!selected.id) {
+            select = newData[0];
+          } else {
+            select = newData.filter(e => e.id === selected.id)[0];
+          }
           _this.setState({
             dataSource: newData,
             pregnancy: newData[0].pregnancy,
+            selected: select,
             // isLoading: false,
           });
         }
@@ -115,7 +127,7 @@ class App extends Component {
         </Layout.Header>
         <Layout>
           <Layout.Sider width={260} className={styles['app-sider']}>
-            <SiderMenu setItem={this.setItem} dataSource={dataSource} />
+            <SiderMenu setItem={this.setItem} selected={selected} dataSource={dataSource} />
           </Layout.Sider>
           <Layout.Content className={styles['app-content']}>
             <Content selected={selected} />

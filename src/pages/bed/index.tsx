@@ -153,7 +153,7 @@ const EditableTable = (props: any) => {
             }
             let t = '';
             const current = options.filter(e => e.wardId === text);
-            if (current) {
+            if (current && current[0] && current[0]['wardName']) {
               t = current[0]['wardName'];
             }
             return t;
@@ -193,7 +193,7 @@ const EditableTable = (props: any) => {
             }
             let t = '';
             const current = options.filter(e => e.wardId === text);
-            if (current) {
+            if (current && current[0] && current[0]['wardName']) {
               t = current[0]['wardName'];
             }
             return t;
@@ -284,7 +284,7 @@ const EditableTable = (props: any) => {
             const areaNO = newData[index]['areano'];
             const pos = options.findIndex(item => item.wardId === areaNO);
             const currentWard = options[pos];
-            console.log('TCL8888', newData[index], options, currentWard);
+            // console.log('TCL8888', newData[index], options, currentWard);
             if (index > -1) {
 
                 request

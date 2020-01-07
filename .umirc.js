@@ -37,7 +37,7 @@ export default {
               context: { title: '管理后台' },
             },
           ],
-          'ctg-record': [
+          index: [
             './src/pages/ctg-record',
             {
               context: { title: '胎监记录' },

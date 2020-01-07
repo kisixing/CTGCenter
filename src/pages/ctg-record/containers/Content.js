@@ -23,7 +23,7 @@ export default class Content extends Component {
       printVisible: false,
       analyzeVisible: false,
       reportVisible: false,
-      docId: ''
+      docId: '',
     }
   }
 
@@ -35,6 +35,16 @@ export default class Content extends Component {
       this.fetch(docId);
     }
   }
+
+  componentDidMount() {
+    const { selected } = this.props;
+    setTimeout(() => {
+      this.fetch(selected.ctgexam.note);
+    }, 600);
+  }
+  // componentWillUnmount() {
+  //   event.off('signed', () => {});
+  // }
 
   fetch = docId => {
     const _this = this;
@@ -68,7 +78,7 @@ export default class Content extends Component {
   }
 
   showModal = e => {
-    console.log('test target', e.target.id);
+    // console.log('test target', e.target.id);
     const id = e.target.id;
     if (id === 'print') {
       this.setState({ printVisible: true });
@@ -79,7 +89,7 @@ export default class Content extends Component {
     }
   };
 
-  handleCancel = () => {
+  handleCancel = e => {
     this.setState({
       printVisible: false,
       analyzeVisible: false,
@@ -121,6 +131,7 @@ export default class Content extends Component {
       reportVisible,
     } = this.state;
     const { selected = {} } = this.props;
+    // console.log('99999998888888', selected)
     const disabled = !(selected && selected.id);
     const ctgexam = selected.ctgexam ? selected.ctgexam : {};
     const hasSigned = !!ctgexam.report;
@@ -140,18 +151,19 @@ export default class Content extends Component {
             报告
           </Button> */}
           {signable && (
-            <Button className="primary-link" disabled={disabled} onClick={this.showModal}>
+            <Button id="print" className="print" disabled={disabled} onClick={this.showModal}>
               {hasSigned ? '重新生成' : '报告生成'}
             </Button>
           )}
           {hasSigned && (
-            <Button className="primary-link" onClick={this.showModal}>
+            <Button id="report" className="primary-link" onClick={this.showModal}>
               查看
             </Button>
           )}
 
           {printVisible ? (
             <PrintPreview
+              id="print"
               docId={docId}
               visible={printVisible}
               dataSource={dataSource}
@@ -162,6 +174,7 @@ export default class Content extends Component {
           ) : null}
           {analyzeVisible ? (
             <Analyze
+              id="analyze"
               docId={docId}
               visible={analyzeVisible}
               dataSource={dataSource}
@@ -171,6 +184,7 @@ export default class Content extends Component {
           ) : null}
           {reportVisible ? (
             <ReportPreview
+              id="report"
               visible={reportVisible}
               onCancel={this.handleCancel}
               docid={selected.ctgexam && selected.ctgexam.note}

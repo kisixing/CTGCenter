@@ -22,14 +22,14 @@ class SiderMenu extends Component {
 
   render() {
     const { selectedKeys } = this.state;
-    const { dataSource } = this.props;
+    const { dataSource, selected } = this.props;
+    // console.log('555555555', selectedKeys, [selected.id]);
     return (
       <Menu
         mode="inline"
         className={styles.wrapper}
-        selectedKeys={selectedKeys}
+        selectedKeys={selected.id && [selected.id.toString()]}
         onClick={this.handleClick}
-
       >
         {dataSource.map(item => {
           return (

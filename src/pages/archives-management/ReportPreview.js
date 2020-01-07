@@ -29,7 +29,6 @@ function ReportPreview(props) {
       arr.push(obj);
     }
     arr.sort(compare('value'));
-    console.log('77777888888', arr);
     return arr[0]['key'];
   };
 
@@ -81,6 +80,7 @@ function ReportPreview(props) {
     startTime = '',
     inpatientNO = '',
     gestationalWeek = '',
+    id,
   } = props;
 
   function compare(key) {
@@ -95,6 +95,7 @@ function ReportPreview(props) {
 
   return (
     <Modal
+      id={id}
       maskClosable={false}
       getContainer={false}
       destroyOnClose
