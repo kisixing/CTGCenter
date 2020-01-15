@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Modal, Input, Select, Button } from 'antd';
+import { Form, Modal, Input, Select, Switch, Button } from 'antd';
 
 class WardModal extends Component {
   render() {
@@ -52,14 +52,16 @@ class WardModal extends Component {
               </Select>,
             )}
           </Form.Item>
+          <Form.Item label="自动监护">
+            {getFieldDecorator('auto', {
+              rules: [{ required: true, message: '请确认是否开启自动监护!' }],
+            })(<Switch defaultChecked checkedChildren="on" unCheckedChildren="off" />)}
+          </Form.Item>
           {title.includes('编辑') ? (
             <Form.Item label="绑定设备列表">
               {getFieldDecorator('note', {
                 rules: [{ required: false, message: '请选择订阅列表!' }],
-              })(
-                <Select mode="multiple" placeholder="请选择订阅列表" disabled>
-                </Select>,
-              )}
+              })(<Select mode="multiple" placeholder="请选择订阅列表" disabled></Select>)}
             </Form.Item>
           ) : null}
 

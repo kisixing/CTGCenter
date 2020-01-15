@@ -12,11 +12,13 @@ export function getUrlParam(name) {
   // 初始化params对象
   let params = {};
   for (let i = 0; i < query.length; i++) {
-    const q = query[i].split('=');
-    if (q.length === 2) {
-      params[q[0]] = q[1];
-    }
+    const index = query[i].indexOf('=');
+    const key = query[i].slice(0, index);
+    const value = query[i].slice(index + 1);
+    // const obj = { [key] : value};
+    params[key] = value;
   }
+  // console.log('11111111111111', query, params);
   // 传参时，取指定参数
   if (name) {
     const value = params[name]

@@ -37,10 +37,16 @@ export default class Content extends Component {
   }
 
   componentDidMount() {
+    const _this = this;
     const { selected } = this.props;
-    setTimeout(() => {
-      this.fetch(selected.ctgexam.note);
-    }, 600);
+    // console.log('7777777', selected);
+    if (selected.id) {
+      setTimeout(() => {
+        _this.fetch(selected.ctgexam.note);
+        _this.setState({ docId: selected.ctgexam.note });
+      }, 600);
+    }
+
   }
   // componentWillUnmount() {
   //   event.off('signed', () => {});
@@ -131,7 +137,7 @@ export default class Content extends Component {
       reportVisible,
     } = this.state;
     const { selected = {} } = this.props;
-    // console.log('99999998888888', selected)
+    // console.log('99999998888888', selected, docId)
     const disabled = !(selected && selected.id);
     const ctgexam = selected.ctgexam ? selected.ctgexam : {};
     const hasSigned = !!ctgexam.report;

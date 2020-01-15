@@ -5,7 +5,7 @@ import { event } from '@lianmed/utils';
 import moment from "moment";
 import { parse, stringify } from 'qs';
 import request from "../../common/request";
-import { auth } from '../../common/utils';
+import { auth, getUrlParam } from '../../common/utils';
 
 // import 'antd/dist/antd.css';
 import SiderMenu from "./containers/SiderMenu";
@@ -72,11 +72,21 @@ class App extends Component {
     const { selected } = this.state;
     // 加载档案列表
     const url_params = window.location.search.substr(1);
-    const params = parse(url_params);
-    const paramsStr = stringify(params);
+    const params = getUrlParam();
+    let query = '';
+    Object.keys(params).forEach(function(key, index) {
+      const value = params[key];
+      if (index === 0) {
+        query += `${key}=${encodeURIComponent(value)}`;
+      } else {
+        query += `&${key}=${encodeURIComponent(value)}`;
+      }
+    });
+    // const paramsStr = stringify(params);
+    // console.log('88888999999', query);
 
     request
-      .get(`/prenatal-visits-encrypt?${paramsStr}`)
+      .get(`/prenatal-visits-encrypt?${query}`)
       .then(function(response) {
         // handle success
         const dataSource = response.data;

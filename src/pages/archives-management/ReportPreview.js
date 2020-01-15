@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Modal, Menu, Spin } from 'antd';
+import { Modal, Menu, Spin, Button } from 'antd';
 import moment from 'moment';
 
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
@@ -83,6 +83,14 @@ function ReportPreview(props) {
     id,
   } = props;
 
+  const onDownload = () => {
+    console.log(currentReport);
+    // const filePath = `/ctg-exams-pdfurl/${currentReport}`;
+    // request.get(filePath);
+    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${currentReport}`;
+    window.open(filePath);
+  };
+
   function compare(key) {
     return function(value1, value2) {
       const val1 = value1[key];
@@ -134,18 +142,13 @@ function ReportPreview(props) {
             })}
         </Menu>
         <div style={{ flex: 1 }}>
-          <Spin
-            wrapperClassName={styles.chart}
-            spinning={loading}
-          >
-            <PreviewContent
-              pdfBase64={pdfBase64}
-              wh={wh}
-              isFull
-              borderd={false}
-            />
+          <Spin wrapperClassName={styles.chart} spinning={loading}>
+            <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
           </Spin>
         </div>
+        <Button type="primary" style={{ position: 'absolute', bottom: 12, right: 24, zIndex: 99 }} onClick={onDownload}>
+          打印
+        </Button>
       </div>
     </Modal>
   );
