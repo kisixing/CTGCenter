@@ -136,12 +136,12 @@ const EditableTable = (props: any) => {
           key: 'subdevice',
           width: 100,
         },
-        // {
-        //     title: '床号',
-        //     dataIndex: 'bedno',
-        //     key: 'bedno',
-        //     width: 100
-        // },
+        {
+          title: 'ERP',
+          dataIndex: 'ERP',
+          key: 'ERP',
+          width: 100,
+        },
         {
           title: '病区',
           dataIndex: 'areano',
@@ -269,6 +269,7 @@ const EditableTable = (props: any) => {
       const val = {
         'deviceno.equals': values.deviceno ? values.deviceno : undefined,
         'areano.equals': values.areano,
+        'erp.equals': values.ERP
       }
       fetchData(val);
     }

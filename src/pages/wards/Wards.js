@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import { Table, Card, Button, Divider, Tooltip, Popconfirm, message } from 'antd';
+import { Table, Card, Button, Divider, Tooltip, Popconfirm, message, Badge } from 'antd';
 import { request } from '@lianmed/utils';
 import WardModal from './WardModal';
 import { auth } from '../../common/utils';
@@ -34,13 +34,14 @@ class Wards extends Component {
         selected: record,
       },
       () => {
-        const { wardId, wardName, wardNamezh, wardType, note } = record;
+        const { wardId, wardName, wardNamezh, wardType, note, auto } = record;
 
         this.formRef.props.form.setFieldsValue({
           wardId: wardId,
           wardName: wardName,
           wardNamezh: wardNamezh,
           wardType: wardType,
+          auto: auto,
           note: note ? note.split(',') : [],
         });
       },
@@ -104,12 +105,12 @@ class Wards extends Component {
   };
 
   editWard = () => {
-    this.setState({ loading: true });
     const { selected } = this.state;
     this.formRef.props.form.validateFields((error, values) => {
       if (error) {
         return;
       }
+      this.setState({ loading: true });
       const { note, ...filterValues } = values;
       const newValues = { ...selected, ...filterValues };
       request
@@ -176,6 +177,13 @@ class Wards extends Component {
           }
           return t;
         },
+      },
+      {
+        title: '自动监护',
+        dataIndex: 'auto',
+        key: 'auto',
+        width: 100,
+        render: text => (!!text ? <Badge status="success" /> : <Badge status="default" />),
       },
       {
         title: '绑定设备',

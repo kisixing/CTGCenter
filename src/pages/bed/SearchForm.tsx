@@ -32,54 +32,35 @@ class RearchForm extends Component<any, any> {
     const { getFieldDecorator } = form;
     return (
       <Form className="ant-advanced-search-form" layout="inline" onSubmit={this.handleSearch}>
-        <Row gutter={2}>
-          <Col span={6}>
-            <Form.Item label="设备号">
-              {getFieldDecorator('deviceno', {
-                rules: [
-                  {
-                    required: false,
-                    message: '输入设备号!',
-                  },
-                ],
-              })(<Input allowClear placeholder="设备号" />)}
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="病区号">
-              {getFieldDecorator('areano', {
-                rules: [
-                  {
-                    required: false,
-                    message: '输入病区号!',
-                  },
-                ],
-              })(
-                <Select allowClear style={{ width: '180px' }} onFocus={this.fetchOptions}>
-                  {
-                    options.map(_ => {
-                      return (
-                        <Select.Option value={_.wardId} key={_.wardId}>
-                          {_.wardName}
-                        </Select.Option >
-                      )
-                    })
-                  }
-                </Select>
-                )}
-            </Form.Item>
-          </Col>
-          <Col span={4} style={{ padding: '4px' }}>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-              重置
-            </Button>
-          </Col>
-        </Row>
+        <Form.Item label="设备编号">
+          {getFieldDecorator('deviceno')(<Input allowClear placeholder="输入设备编号" />)}
+        </Form.Item>
+        <Form.Item label="ERP">
+          {getFieldDecorator('ERP')(<Input allowClear placeholder="输入ERP" />)}
+        </Form.Item>
+        <Form.Item label="病区号">
+          {getFieldDecorator('areano')(
+            <Select allowClear style={{ width: '180px' }} onFocus={this.fetchOptions}>
+              {options.map(_ => {
+                return (
+                  <Select.Option value={_.wardId} key={_.wardId}>
+                    {_.wardName}
+                  </Select.Option>
+                );
+              })}
+            </Select>,
+          )}
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            搜索
+          </Button>
+          <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+            重置
+          </Button>
+        </Form.Item>
       </Form>
-    )
+    );
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Modal, Menu, Spin, Button } from 'antd';
+import { Modal, Menu, Spin, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
@@ -11,25 +11,29 @@ export const Context = React.createContext({});
 function ReportPreview(props) {
   let arr = [];
   const getV = () => {
-    const { report = '' } = props;
-    let reportObj = {};
+    const { report } = props;
     try {
-      reportObj = JSON.parse(report);
+      if (Object.prototype.toString.call(report) === '[object Array]') {
+        // Array
+        arr = report.sort(compare('time'));
+      } else {
+        arr = JSON.parse(report);
+      }
     } catch (error) {
       console.log('report格式不正确', error);
     }
 
     // 是否为对象
-    const isObj = Object.prototype.toString.call(reportObj);
-    if (!isObj) {
-      return null;
-    }
-    for (let key in reportObj) {
-      const obj = { key, value: reportObj[key] };
-      arr.push(obj);
-    }
-    arr.sort(compare('value'));
-    return arr[0]['key'];
+    // const isObj = Object.prototype.toString.call(reportObj);
+    // if (!isObj) {
+    //   return null;
+    // }
+    // for (let key in reportObj) {
+    //   const obj = { key, value: reportObj[key] };
+    //   arr.push(obj);
+    // }
+    // arr.sort(compare('value'));
+    return arr[0]['bizSn'];
   };
 
   const [loading, setLoading] = useState(false);
@@ -56,6 +60,8 @@ function ReportPreview(props) {
       })
       .then(({ pdfdata }) => {
         pdfdata && setPdfBase64(`data:application/pdf;base64,${pdfdata}`);
+        setLoading(false);
+      }).catch(err => {
         setLoading(false);
       });
   };
@@ -90,6 +96,16 @@ function ReportPreview(props) {
     const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${currentReport}`;
     window.open(filePath);
   };
+
+  const confirm = () => {
+    // 当前档案id --> currentReport
+
+  }
+
+  const archiving = (e) => {
+    // 当前档案id --> currentReport
+
+  }
 
   function compare(key) {
     return function(value1, value2) {
@@ -134,21 +150,27 @@ function ReportPreview(props) {
           {arr &&
             arr.map(e => {
               return (
-                <Menu.Item key={e.key}>
-                  <div>{e.key}</div>
+                <Menu.Item key={e.bizSn}>
+                  <div>{e.bizSn}</div>
                   {/* <div>{e.value}</div> */}
                 </Menu.Item>
               );
             })}
         </Menu>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, padding: 12 }}>
           <Spin wrapperClassName={styles.chart} spinning={loading}>
             <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
           </Spin>
         </div>
-        <Button type="primary" style={{ position: 'absolute', bottom: 12, right: 24, zIndex: 99 }} onClick={onDownload}>
-          打印
-        </Button>
+        <div style={{ position: 'absolute', bottom: 12, right: 24, zIndex: 99 }}>
+          <Button onClick={archiving}>归档</Button>
+          <Popconfirm title="确认删除该报告？" onConfirm={confirm} okText="是" cancelText="否">
+            <Button>删除</Button>
+          </Popconfirm>
+          <Button type="primary" onClick={onDownload}>
+            打印
+          </Button>
+        </div>
       </div>
     </Modal>
   );

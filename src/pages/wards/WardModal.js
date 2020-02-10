@@ -54,8 +54,10 @@ class WardModal extends Component {
           </Form.Item>
           <Form.Item label="自动监护">
             {getFieldDecorator('auto', {
+              valuePropName: 'checked',
+              initialValue: true,
               rules: [{ required: true, message: '请确认是否开启自动监护!' }],
-            })(<Switch defaultChecked checkedChildren="on" unCheckedChildren="off" />)}
+            })(<Switch checkedChildren="on" unCheckedChildren="off" />)}
           </Form.Item>
           {title.includes('编辑') ? (
             <Form.Item label="绑定设备列表">

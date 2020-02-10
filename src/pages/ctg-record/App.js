@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Layout } from "antd";
+import { Layout, Modal } from 'antd';
 import r from "@lianmed/request";
 import { event } from '@lianmed/utils';
 import moment from "moment";
-import { parse, stringify } from 'qs';
+// import { parse, stringify } from 'qs';
 import request from "../../common/request";
 import { auth, getUrlParam } from '../../common/utils';
 
@@ -82,15 +82,13 @@ class App extends Component {
         query += `&${key}=${encodeURIComponent(value)}`;
       }
     });
-    // const paramsStr = stringify(params);
-    // console.log('88888999999', query);
 
     request
       .get(`/prenatal-visits-encrypt?${query}`)
       .then(function(response) {
         // handle success
         const dataSource = response.data;
-        if (response && response.data) {
+        if (response && dataSource && dataSource.length) {
           const newData = dataSource.map(e => {
             return {
               ...e,
@@ -108,12 +106,18 @@ class App extends Component {
             dataSource: newData,
             pregnancy: newData[0].pregnancy,
             selected: select,
-            // isLoading: false,
+            isLoading: false,
+          });
+        } else {
+          // 返回错误或返回空，弹框提示
+          _this.setState({ isLoading: false });
+          Modal.warning({
+            centered: true,
+            okText: '确定',
+            title: '提示',
+            content: '该孕妇无任何档案，请稍后再试...',
           });
         }
-        setTimeout(() => {
-          _this.setState({ isLoading: false });
-        }, 600);
       })
       .catch(function(error) {
         // handle error
@@ -127,6 +131,7 @@ class App extends Component {
 
   render() {
     const { isLoading, selected, dataSource, pregnancy } = this.state;
+    console.log('loading -->', isLoading)
     if (isLoading) {
       return <PageLoading />;
     }
@@ -135,7 +140,7 @@ class App extends Component {
         <Layout.Header className={styles['app-header']}>
           <Header dataSource={pregnancy} />
         </Layout.Header>
-        <Layout>
+        <Layout style={{ height: '100%' }}>
           <Layout.Sider width={260} className={styles['app-sider']}>
             <SiderMenu setItem={this.setItem} selected={selected} dataSource={dataSource} />
           </Layout.Sider>

@@ -1,13 +1,13 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 90px);
-  // height: 100%;
-  padding: 24px;
+  // display: flex;
+  // flex-direction: column;
+  height: 100%;
+  padding: 12px;
   background-color: #fff;
+  position: relative;
 
   .ctg {
-    height: 100%;
+    height: calc(100vh - 64px - 106px);
 
     :global {
       .ant-spin-nested-loading {
@@ -25,7 +25,7 @@
   }
 
   .buttons {
-    margin-top: 24px;
+    padding-top: 24px;
     text-align: right;
 
     button {

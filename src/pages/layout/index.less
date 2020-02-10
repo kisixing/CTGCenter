@@ -1,6 +1,7 @@
 
 .container {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: auto;
 }
 
 .header {
@@ -33,7 +34,7 @@
 .iframe_wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 88px);
   background-color: #fff;
 
   .iframe {
