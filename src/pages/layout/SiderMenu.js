@@ -119,6 +119,10 @@ export class SiderMenu extends Component {
           <Icon type="file" />
           <span>病区管理</span>
         </Menu.Item>
+        <Menu.Item key="013" title="模板管理" href={`${origin}/template.html`}>
+          <Icon type="copy" />
+          <span>模板管理</span>
+        </Menu.Item>
       </Menu>
     );
   }

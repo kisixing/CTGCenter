@@ -9,15 +9,18 @@ import styles from './ReportPreview.less';
 export const Context = React.createContext({});
 
 function ReportPreview(props) {
-  let arr = [];
   const getV = () => {
+    let newArr = [];
     const { report } = props;
     try {
       if (Object.prototype.toString.call(report) === '[object Array]') {
         // Array
-        arr = report.sort(compare('time'));
+        newArr = report;
+        if (report[0]['time']) {
+          newArr = report.sort(compare('time'));
+        }
       } else {
-        arr = JSON.parse(report);
+        newArr = JSON.parse(report);
       }
     } catch (error) {
       console.log('report格式不正确', error);
@@ -33,10 +36,16 @@ function ReportPreview(props) {
     //   arr.push(obj);
     // }
     // arr.sort(compare('value'));
-    return arr[0]['bizSn'];
+    return newArr[0];
   };
 
+  const [arr, setArr] = useState([]);
   const [loading, setLoading] = useState(false);
+  // 归档loading
+  const [archiveLoading, setArchiveLoading] = useState(false);
+  // 删除loading
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
   const [currentReport, setCurrentReport] = useState(getV());
   const [pdfBase64, setPdfBase64] = useState('');
   const inputEl = useRef(null);
@@ -47,7 +56,9 @@ function ReportPreview(props) {
   }, []);
 
   useEffect(() => {
-    fetchpdf(currentReport);
+    setArr(props.report);
+    const reportId = currentReport.bizSn;
+    fetchpdf(reportId);
   }, []);
 
   const fetchpdf = (value) => {
@@ -66,8 +77,10 @@ function ReportPreview(props) {
       });
   };
 
-  const handleClick = ({ key }) => {
-    setCurrentReport(key);
+  const handleClick = (e) => {
+    const key = e.key;
+    const value = e.item.props.value;
+    setCurrentReport(value);
     fetchpdf(key);
   };
 
@@ -90,22 +103,70 @@ function ReportPreview(props) {
   } = props;
 
   const onDownload = () => {
-    console.log(currentReport);
-    // const filePath = `/ctg-exams-pdfurl/${currentReport}`;
+    // console.log(currentReport);
+    const reportId = currentReport.bizSn;
+    // const filePath = `/ctg-exams-pdfurl/${reportId}`;
     // request.get(filePath);
-    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${currentReport}`;
+    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${reportId}`;
     window.open(filePath);
   };
 
-  const confirm = () => {
-    // 当前档案id --> currentReport
+  const onDelect = bizSn => {
+    // 删除报告
+    // 当前档案id --> currentReport.bizSn
+    setDeleteLoading(true);
+    request
+      .delete(`/obsolete-report/${bizSn}`)
+      .then((res) => {
+        const newArr = res.report;
+        setArr(newArr);
+        const currentReport = newArr.filter(e => e.bizSn === bizSn)[0];
+        setCurrentReport(currentReport);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
 
-  }
+  const doArchiving = bizSn => {
+    setArchiveLoading(true);
+    // 归档
+    // 当前档案id --> currentReport.bizSn
+    request
+      .put('/doc/archive', {
+        data: { bizSn },
+      })
+      .then(res => {
+        const newArr = res.report;
+        setArr(newArr);
+        const currentReport = newArr.filter(e => e.bizSn === bizSn)[0];
+        setCurrentReport(currentReport);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
 
-  const archiving = (e) => {
-    // 当前档案id --> currentReport
-
-  }
+  const undoArchiving = bizSn => {
+    setArchiveLoading(true);
+    // 撤销归档
+    request
+      .put('/doc/undo-archive', {
+        data: { bizSn },
+      })
+      .then(res => {
+        const newArr = res.report;
+        setArr(newArr);
+        const currentReport = newArr.filter(e => e.bizSn === bizSn)[0];
+        setCurrentReport(currentReport);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
 
   function compare(key) {
     return function(value1, value2) {
@@ -117,6 +178,7 @@ function ReportPreview(props) {
     }
   }
 
+  console.log('8888888', currentReport)
   return (
     <Modal
       id={id}
@@ -143,28 +205,45 @@ function ReportPreview(props) {
       <div className={styles.modal_content} ref={inputEl}>
         <Menu
           style={{ width: 186 }}
-          defaultSelectedKeys={[currentReport]}
+          defaultSelectedKeys={[currentReport.bizSn]}
           theme="light"
           onClick={handleClick}
         >
           {arr &&
             arr.map(e => {
+              const { valid, /* archived, */ bizSn } = e;
+              if (!valid) {
+                // 无效报告不显示
+                return null;
+              }
               return (
-                <Menu.Item key={e.bizSn}>
-                  <div>{e.bizSn}</div>
-                  {/* <div>{e.value}</div> */}
+                <Menu.Item key={bizSn} value={e}>
+                  <div>{bizSn}</div>
+                  {/* <div>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</div> */}
                 </Menu.Item>
               );
             })}
         </Menu>
-        <div style={{ flex: 1, padding: 12 }}>
+        <div style={{ flex: 1, padding: '12px 0' }}>
           <Spin wrapperClassName={styles.chart} spinning={loading}>
             <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
           </Spin>
         </div>
-        <div style={{ position: 'absolute', bottom: 12, right: 24, zIndex: 99 }}>
-          <Button onClick={archiving}>归档</Button>
-          <Popconfirm title="确认删除该报告？" onConfirm={confirm} okText="是" cancelText="否">
+        <div style={{ position: 'absolute', bottom: 8, right: 24, zIndex: 99 }}>
+          {currentReport.archived ? (
+            <Button onClick={() => undoArchiving(currentReport.bizSn)}>撤销归档</Button>
+          ) : (
+            <Button type="primary" onClick={() => doArchiving(currentReport.bizSn)}>
+              归档
+            </Button>
+          )}
+          <Popconfirm
+            title={`确认删除档案号为${currentReport.bizSn}的报告吗？`}
+            placement="topRight"
+            onConfirm={() => onDelect(currentReport.bizSn)}
+            okText="是"
+            cancelText="否"
+          >
             <Button>删除</Button>
           </Popconfirm>
           <Button type="primary" onClick={onDownload}>

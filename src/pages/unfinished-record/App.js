@@ -110,7 +110,7 @@ class App extends Component {
   render() {
     const { dataSource, selected } = this.state;
     return (
-      <Layout>
+      <Layout className={styles['app-wrapper']}>
         <Layout.Header className={styles.header}>胎儿监护未处理档案</Layout.Header>
         <Layout style={{ height: '100%' }}>
           <Layout.Sider width={328} className={styles.sider}>

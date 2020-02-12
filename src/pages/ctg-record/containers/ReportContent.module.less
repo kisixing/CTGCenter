@@ -1,0 +1,52 @@
+.sider {
+  background-color: #FFF;
+
+  .wrapper {
+    height: calc(100vh - 64px);
+    border-right: none !important;
+    overflow: auto;
+
+    .item {
+      height: auto !important;
+      width: 100% !important;
+      line-height: 1.5;
+      margin-top: 0 !important;
+      margin-bottom: 4px !important;
+      padding: 12px 36px;
+      box-shadow: 1px 1px 4px #e8e8e8;
+
+      &:hover {
+        background: #e6f7ff;;
+      }
+    }
+  }
+
+}
+
+.content {
+  height: 100%;
+  padding: 12px 12px 0 12px;
+
+  .innerContent {
+    position: relative;
+    height: 100%;
+    padding: 12px;
+    text-align: center;
+    background-color: #fff;
+
+    .spiner {
+      height: 100%;
+    }
+
+    .buttons {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+
+      button {
+        margin-left: 12px;
+      }
+    }
+  }
+}
+

@@ -8,8 +8,8 @@
 }
 
 .app-header {
-  padding: 0 24px;
-  margin-bottom: 1px;
+  padding: 0 12px;
+  border-bottom: 1px solid #eee;
   background-color: #fff;
   font-size: 14px;
 }
@@ -19,8 +19,7 @@
 }
 
 .app-content {
-  height: 100%;
-  padding: 12px;
+  padding: 12px 0 0 12px;
 }
 
 // react-pdf
@@ -43,7 +42,7 @@
 
   .ant-modal-body {
     height: calc(100% - 55px) !important;
-    padding: 24px !important;
+    padding: 12px !important;
     background: #f0f2f5 !important;
     overflow: auto;
   }
@@ -52,6 +51,10 @@
     height: 40px !important;
     width: 40px !important;
     line-height: 40px !important;
+  }
+
+  .react-pdf__Document {
+    display: inline-block;
   }
 
   .react-pdf__Page__canvas {

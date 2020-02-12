@@ -11,6 +11,7 @@ import { auth, getUrlParam } from '../../common/utils';
 import SiderMenu from "./containers/SiderMenu";
 import Header from './containers/Header';
 import Content from './containers/Content';
+import ReportContent from './containers/ReportContent';
 import PageLoading from './components/PageLoading';
 import styles from './App.less';
 
@@ -23,7 +24,8 @@ class App extends Component {
       isLoading: true,
       selected: {},
       dataSource: [],
-      pregnancy: {}
+      pregnancy: {},
+      activeKey: 'archive',
     };
   }
 
@@ -45,25 +47,25 @@ class App extends Component {
   fetchAuth = () => {
     const ACCOUNT = window.CONFIG.account;
     request
-      .post("/authenticate", {
+      .post('/authenticate', {
         username: ACCOUNT.username,
-        password: ACCOUNT.password
+        password: ACCOUNT.password,
       })
       .then(function(response) {
-        const access_token = "Bearer " + response.data.id_token;
-        sessionStorage.setItem("ACCESS_TOKEN", access_token);
+        const access_token = 'Bearer ' + response.data.id_token;
+        sessionStorage.setItem('ACCESS_TOKEN', access_token);
         auth.set(response.data.id_token);
         // _this.setState({ isLoading: false });
 
         r.config({
           Authorization: access_token,
-          prefix: window.CONFIG.baseURL
+          prefix: window.CONFIG.baseURL,
         });
       })
       .catch(function(error) {
-        console.log("api/authenticate", error);
+        console.log('api/authenticate', error);
       });
-  }
+  };
 
   // TODO 11.12 档案列表请求方式
   fetchList = () => {
@@ -129,25 +131,35 @@ class App extends Component {
     this.setState({ selected: item });
   };
 
+  // tabs标签卡切换
+  tabChange = key => {
+    this.setState({ activeKey: key });
+  };
+
   render() {
-    const { isLoading, selected, dataSource, pregnancy } = this.state;
-    console.log('loading -->', isLoading)
+    const { isLoading, selected, dataSource, pregnancy, activeKey } = this.state;
+    // console.log('loading -->', isLoading)
     if (isLoading) {
       return <PageLoading />;
     }
     return (
       <Layout className={styles['app-wrapper']}>
         <Layout.Header className={styles['app-header']}>
-          <Header dataSource={pregnancy} />
+          <Header dataSource={pregnancy} activeKey={activeKey} onChange={this.tabChange} />
         </Layout.Header>
-        <Layout style={{ height: '100%' }}>
-          <Layout.Sider width={260} className={styles['app-sider']}>
-            <SiderMenu setItem={this.setItem} selected={selected} dataSource={dataSource} />
-          </Layout.Sider>
-          <Layout.Content className={styles['app-content']}>
-            <Content selected={selected} />
-          </Layout.Content>
-        </Layout>
+
+        {activeKey === 'archive' ? (
+          <Layout style={{ height: '100%' }}>
+            <Layout.Sider width={260} className={styles['app-sider']}>
+              <SiderMenu setItem={this.setItem} selected={selected} dataSource={dataSource} />
+            </Layout.Sider>
+            <Layout.Content className={styles['app-content']}>
+              <Content selected={selected} />
+            </Layout.Content>
+          </Layout>
+        ) : (
+          <ReportContent dataSource={dataSource} />
+        )}
       </Layout>
     );
   }

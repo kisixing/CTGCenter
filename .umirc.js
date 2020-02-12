@@ -109,6 +109,12 @@ export default {
               context: { title: '病区管理' },
             },
           ],
+          template: [
+            './src/pages/template',
+            {
+              context: { title: '模板管理' }
+            }
+          ]
         },
         html: {
           template: './src/common/document.ejs',
