@@ -36,7 +36,7 @@ class RearchForm extends Component<any, any> {
           {getFieldDecorator('deviceno')(<Input allowClear placeholder="输入设备编号" />)}
         </Form.Item>
         <Form.Item label="ERP">
-          {getFieldDecorator('ERP')(<Input allowClear placeholder="输入ERP" />)}
+          {getFieldDecorator('erp')(<Input allowClear placeholder="输入ERP" />)}
         </Form.Item>
         <Form.Item label="病区号">
           {getFieldDecorator('areano')(

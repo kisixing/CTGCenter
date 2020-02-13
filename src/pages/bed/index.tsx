@@ -138,8 +138,8 @@ const EditableTable = (props: any) => {
         },
         {
           title: 'ERP',
-          dataIndex: 'ERP',
-          key: 'ERP',
+          dataIndex: 'erp',
+          key: 'erp',
           width: 100,
         },
         {
@@ -269,7 +269,7 @@ const EditableTable = (props: any) => {
       const val = {
         'deviceno.equals': values.deviceno ? values.deviceno : undefined,
         'areano.equals': values.areano,
-        'erp.equals': values.ERP
+        'erp.equals': values.erp
       }
       fetchData(val);
     }
@@ -341,7 +341,7 @@ const EditableTable = (props: any) => {
             onCell: record => ({
                 record,
                 inputType: inputType,
-                disabled: ['deviceno', 'subdevice', 'bedno', 'outWard'].includes(col.dataIndex) ? true :false,
+                disabled: ['deviceno', 'subdevice', 'bedno', 'outWard', 'erp'].includes(col.dataIndex) ? true :false,
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),

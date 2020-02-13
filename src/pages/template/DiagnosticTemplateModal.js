@@ -11,7 +11,6 @@ class DiagnosticTemplateModal extends Component {
   getFocusPosition = () => {
     const target = this.inputElement.current;
     const { selectionStart } = target.textAreaRef;
-
   }
 
   // 插入【】标记
