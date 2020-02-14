@@ -74,6 +74,8 @@ class ReportContent extends Component {
     request
       .delete(`/obsolete-report/${bizSn}`)
       .then((res) => {
+        // 重新请求档案列表
+        this.props.fetchList();
         this.setState({ deleteLoading: false });
       })
       .catch(err => {

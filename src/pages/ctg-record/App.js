@@ -68,8 +68,9 @@ class App extends Component {
   };
 
   // TODO 11.12 档案列表请求方式
-  fetchList = () => {
-    this.setState({ isLoading: true });
+  fetchList = (loader = true) => {
+    let data = [];
+    if (!loader) this.setState({ isLoading: true });
     const _this = this;
     const { selected } = this.state;
     // 加载档案列表
@@ -104,6 +105,7 @@ class App extends Component {
           } else {
             select = newData.filter(e => e.id === selected.id)[0];
           }
+          data = newData
           _this.setState({
             dataSource: newData,
             pregnancy: newData[0].pregnancy,
@@ -125,6 +127,7 @@ class App extends Component {
         // handle error
         console.log('/prenatal-visitspage-encrypt', error);
       });
+      return data;
   };
 
   setItem = item => {
@@ -158,7 +161,7 @@ class App extends Component {
             </Layout.Content>
           </Layout>
         ) : (
-          <ReportContent dataSource={dataSource} />
+          <ReportContent dataSource={dataSource} fetchList={this.fetchList} />
         )}
       </Layout>
     );

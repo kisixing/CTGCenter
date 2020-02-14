@@ -282,12 +282,10 @@ const EditableTable = (props: any) => {
             const newData = [...dd];
             const index = newData.findIndex(item => item.id === id);
             // 更新病区名
-            const areaNO = newData[index]['areano'];
-            const pos = options.findIndex(item => item.wardId === areaNO);
-            const currentWard = options[pos];
-            // console.log('TCL8888', newData[index], options, currentWard);
+            const areaNO = row['areano'];
+            const currentWard = options.filter(item => item.wardId === areaNO)[0];
+            // console.log('object', options, areaNO, currentWard);
             if (index > -1) {
-
                 request
                   .put('/bedinfos', {
                     data: {
