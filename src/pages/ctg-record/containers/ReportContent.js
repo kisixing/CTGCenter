@@ -76,7 +76,11 @@ class ReportContent extends Component {
       .then((res) => {
         // 重新请求档案列表
         this.props.fetchList();
-        this.setState({ deleteLoading: false });
+        this.setState({
+          deleteLoading: false,
+          pdfBase64: null,
+          currentReport: {},
+        });
       })
       .catch(err => {
         this.setState({ deleteLoading: false });

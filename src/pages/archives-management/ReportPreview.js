@@ -120,8 +120,12 @@ function ReportPreview(props) {
       .then((res) => {
         const newArr = res.report;
         setArr(newArr);
-        const currentReport = newArr.filter(e => e.bizSn === bizSn)[0];
+        const currentReport = newArr.length ? newArr[0] : {};
         setCurrentReport(currentReport);
+        if (!newArr.length) {
+          setPdfBase64(null);
+        }
+
         setLoading(false);
       })
       .catch(err => {

@@ -140,7 +140,7 @@ export default class Content extends Component {
     // console.log('99999998888888', selected, docId)
     const disabled = !(selected && selected.id);
     const ctgexam = selected.ctgexam ? selected.ctgexam : {};
-    const hasSigned = !!ctgexam.report;
+    const hasSigned = ctgexam.report && ctgexam.report.length > 0;
     const signable = true || !!ctgexam.signable;
     return (
       <div className={styles.wrapper}>
