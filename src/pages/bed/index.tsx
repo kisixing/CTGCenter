@@ -5,7 +5,9 @@
 
 import React, { useState, useEffect, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Input, Popconfirm, Form, Button, Select, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Table, Input, Popconfirm, Button, Select, message } from 'antd';
 import request from "@lianmed/request";
 import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";

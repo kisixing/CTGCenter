@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Spin, Button } from 'antd';
 import moment from 'moment';
 import classnames from 'classnames';
@@ -53,7 +54,7 @@ class CurveChart extends Component {
             </span>
             <Button
               type="link"
-              icon={isFullscreen ? 'fullscreen-exit' : 'fullscreen'}
+              icon={<LegacyIcon type={isFullscreen ? 'fullscreen-exit' : 'fullscreen'} />}
               title={isFullscreen ? '最小化' : '最大化'}
               size={isFullscreen ? 'large' : 'default'}
               onClick={this.switchFullscreen}

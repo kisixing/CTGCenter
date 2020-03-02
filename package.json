@@ -8,6 +8,7 @@
     "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages"
   },
   "dependencies": {
+    "@ant-design/compatible": "^1.0.0",
     "antd": "4.0",
     "axios": "^0.19.0",
     "core-js": "^3.4.0",

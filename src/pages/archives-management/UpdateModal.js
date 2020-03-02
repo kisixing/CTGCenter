@@ -3,7 +3,9 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { Modal, Form, Input, Row, Col, DatePicker, InputNumber, Button, Table, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Row, Col, DatePicker, InputNumber, Button, Table, message } from 'antd';
 import { stringify } from 'qs';
 import request from '../../common/request';
 

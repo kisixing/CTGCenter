@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Select, DatePicker } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Select, DatePicker } from 'antd';
 import moment from 'moment';
 import request from '../../common/request';
 import { isJSON } from '../../common/store';

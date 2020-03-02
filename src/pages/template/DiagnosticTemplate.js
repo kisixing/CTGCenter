@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Card, Table, Divider, Popconfirm, Button, message } from 'antd';
 import { request } from '@lianmed/utils';
 import { auth } from '../../common/utils';
@@ -151,7 +152,7 @@ export default function DiagnosticTemplate() {
         extra={
           <Button
             type="primary"
-            icon="plus"
+            icon={<LegacyIcon type="plus" />}
             size="small"
             loading={false}
             onClick={() => showModal()}

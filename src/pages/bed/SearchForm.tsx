@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Select, Button, Icon } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Input, Select, Button } from 'antd';
 import request from "@lianmed/request";
 
 class RearchForm extends Component<any, any> {

@@ -1,6 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Row, Form, Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Row, Input } from 'antd';
 import { auth } from '../../common/utils';
 import request from '../../common/request';
 import config from '../../common/config';

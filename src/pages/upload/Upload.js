@@ -7,7 +7,9 @@
  *"enable": null
  */
 import React, { Component } from 'react';
-import { Form, Input, Select, Checkbox, Button, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Checkbox, Button, message } from 'antd';
 import qs from 'qs';
 import request from '../../common/request';
 import OSSUpload from './OSSUpload';

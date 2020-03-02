@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Form, Row, Col, Input, DatePicker, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Input, DatePicker, Button } from 'antd';
 
 import styles from './FieldForm.less';
 moment.locale('zh-cn');

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button, message } from 'antd';
 import CustomTable from './CustomTable';
 import NewModal from './NewModal';
@@ -206,7 +207,7 @@ class TaskLog extends Component {
       <div className={styles.container}>
         <div className={styles.title}>任务列表</div>
         <div className={styles.tableHeader}>
-          <Button type="primary" icon="plus" onClick={this.show}>
+          <Button type="primary" icon={<LegacyIcon type="plus" />} onClick={this.show}>
             新增任务
           </Button>
 

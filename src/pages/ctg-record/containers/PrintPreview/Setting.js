@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Pagination, Button, Spin, Empty, Icon } from "antd";
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Pagination, Button, Spin, Empty } from "antd";
 import { Document, Page } from "react-pdf";
 import classnames from "classnames";
 import request from "../../utils/request";
@@ -118,7 +119,7 @@ export default class Setting extends Component {
             }
           }}
         >
-          <Icon
+          <LegacyIcon
             title={isFullpage ? "缩小" : "全屏"}
             type={isFullpage ? "fullscreen-exit" : "fullscreen"}
           />

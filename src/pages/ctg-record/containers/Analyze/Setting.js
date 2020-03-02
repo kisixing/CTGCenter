@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Radio } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Radio } from "antd";
 import styles from "./index.module.less";
 
 class Setting extends Component {

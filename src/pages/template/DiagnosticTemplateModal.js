@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Modal, Input, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Button } from 'antd';
 
 class DiagnosticTemplateModal extends Component {
   constructor(props) {

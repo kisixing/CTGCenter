@@ -6,6 +6,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
 import moment from 'moment';
 import { request } from '@lianmed/utils';
@@ -503,7 +504,7 @@ class Account extends PureComponent {
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
           onClick={this.newAccount}
-          icon="plus"
+          icon={<LegacyIcon type="plus" />}
         >
           新增账号
         </Button>

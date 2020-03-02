@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Upload, Icon, Button } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Upload, Button } from 'antd';
 
 const OSSUpload = (props) => {
   const [OSSData, setOSSData] = useState({});
@@ -55,7 +56,7 @@ const OSSUpload = (props) => {
   return (
     <Upload {...uploadProps}>
       <Button>
-        <Icon type="upload" /> <span>选择上传文件 </span>
+        <LegacyIcon type="upload" /> <span>选择上传文件 </span>
       </Button>
     </Upload>
   );
