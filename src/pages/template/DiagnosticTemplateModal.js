@@ -19,7 +19,10 @@ class DiagnosticTemplateModal extends Component {
   insert = () => {
     const { form } = this.props;
     const target = this.inputElement.current;
-    const { value, selectionStart } = target.textAreaRef;
+
+    // console.log('8888888', target, target.value, target.selectionStart);
+
+    const { value, selectionStart } = target;
     // 截两段
     const str1 = value.slice(0, selectionStart);
     const str2 = value.slice(selectionStart);
@@ -72,7 +75,7 @@ class DiagnosticTemplateModal extends Component {
           <Form.Item label="内容">
             {getFieldDecorator('content', {
               rules: [{ required: true, message: '请输入模板内容!' }],
-            })(<Input.TextArea ref={this.inputElement} rows={4} placeholder="请输入模板内容" />)}
+            })(<textarea ref={this.inputElement} rows={4} placeholder="请输入模板内容" style={{ width: '100%' }} />)}
           </Form.Item>
           <div style={{ textAlign: 'center' }}>
             <Button style={{ marginRight: '12px' }} onClick={onCancel}>

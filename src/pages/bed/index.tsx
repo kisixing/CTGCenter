@@ -14,6 +14,7 @@ import { WrappedFormUtils } from "antd/lib/form/Form";
 import SearchForm from './SearchForm';
 import useLogin from "./useLogin";
 import { auth } from '../../common/utils';
+import styles from './index.less';
 
 const mapStatusToText = {
     1: '工作中',
@@ -350,25 +351,26 @@ const EditableTable = (props: any) => {
         };
     });
     return (
-        <EditableContext.Provider value={props.form}>
-            <div style={{ padding: 20 }}>
-                <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>床位管理</p>
-                <SearchForm onSearch={onSearch} />
-                <Table
-                    size="small"
-                    components={components}
-                    bordered
-                    rowKey="id"
-                    dataSource={dd}
-                    columns={c as any}
-                    // rowClassName="editable-row"
-                    pagination={{
-                        onChange: cancel,
-                    }}
-                />
-            </div>
-
-        </EditableContext.Provider>
+      <EditableContext.Provider value={props.form}>
+        <div className={styles.container}>
+          <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '20px', fontSize: 16 }}>
+            床位管理
+          </p>
+          <SearchForm onSearch={onSearch} />
+          <Table
+            size="small"
+            components={components}
+            bordered
+            rowKey="id"
+            dataSource={dd}
+            columns={c as any}
+            // rowClassName="editable-row"
+            pagination={{
+              onChange: cancel,
+            }}
+          />
+        </div>
+      </EditableContext.Provider>
     );
 }
 
