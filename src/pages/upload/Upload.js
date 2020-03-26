@@ -9,11 +9,13 @@
 import React, { Component } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Input, Select, Checkbox, Button, message } from 'antd';
+import { Input, Select, Checkbox, Button, message, AutoComplete } from 'antd';
 import qs from 'qs';
 import request from '../../common/request';
 import OSSUpload from './OSSUpload';
 import styles from './index.less';
+
+const dataSource = ['ctg-suit', 'pda', 'device-fw', 'device-setting', 'f3' ];
 
 class Upload extends Component {
   state = {
@@ -121,7 +123,7 @@ class Upload extends Component {
                 rules: [{ required: true, message: '请输入版本号!' }],
               })(<Input placeholder="请输入版本号" />)}
             </Form.Item>
-            <Form.Item label="安装包类型">
+            {/* <Form.Item label="安装包类型">
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择上传文件类型!' }],
               })(
@@ -132,6 +134,11 @@ class Upload extends Component {
                   <Select.Option value="device-setting">device-setting</Select.Option>
                 </Select>,
               )}
+            </Form.Item> */}
+            <Form.Item label="安装包类型">
+              {getFieldDecorator('type', {
+                rules: [{ required: true, message: '请选择上传文件类型!' }],
+              })(<AutoComplete dataSource={dataSource} />)}
             </Form.Item>
             <Form.Item label="URI">
               {getFieldDecorator('uri', {
@@ -143,11 +150,6 @@ class Upload extends Component {
                 rules: [{ required: true, message: '请输入简单的描述！' }],
               })(<Input.TextArea rows={4} placeholder="请输入简单的描述..." />)}
             </Form.Item>
-            {/* <Form.Item label="选择文件">
-              {getFieldDecorator('file', {
-                rules: [{ required: true, message: '请选择上传文件！' }],
-              })(<OSSUpload />)}
-            </Form.Item> */}
             <Form.Item label="选择文件">
               <div style={{ position: 'relative' }}>
                 <div style={{ display: 'inline-block' }}>
