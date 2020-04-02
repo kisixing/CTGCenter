@@ -136,7 +136,7 @@ export default class Content extends Component {
       analyzeVisible,
       reportVisible,
     } = this.state;
-    const { selected = {} } = this.props;
+    const { selected = {}, empId } = this.props;
     // console.log('99999998888888', selected, docId)
     const disabled = !(selected && selected.id);
     const ctgexam = selected.ctgexam ? selected.ctgexam : {};
@@ -171,6 +171,7 @@ export default class Content extends Component {
             <PrintPreview
               id="print"
               docId={docId}
+              empId={empId}
               visible={printVisible}
               dataSource={dataSource}
               selected={selected}

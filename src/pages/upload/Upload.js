@@ -138,7 +138,7 @@ class Upload extends Component {
             <Form.Item label="安装包类型">
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择上传文件类型!' }],
-              })(<AutoComplete dataSource={dataSource} />)}
+              })(<AutoComplete placeholder="请选择上传文件类型" dataSource={dataSource} />)}
             </Form.Item>
             <Form.Item label="URI">
               {getFieldDecorator('uri', {

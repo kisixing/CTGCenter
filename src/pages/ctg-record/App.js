@@ -26,6 +26,7 @@ class App extends Component {
       dataSource: [],
       pregnancy: {},
       activeKey: 'archive',
+      empId: '',
     };
   }
 
@@ -76,6 +77,8 @@ class App extends Component {
     // 加载档案列表
     const url_params = window.location.search.substr(1);
     const params = getUrlParam();
+    // TODO
+    this.setState({ empId: params.empId });
     let query = '';
     Object.keys(params).forEach(function(key, index) {
       const value = params[key];
@@ -140,7 +143,7 @@ class App extends Component {
   };
 
   render() {
-    const { isLoading, selected, dataSource, pregnancy, activeKey } = this.state;
+    const { isLoading, selected, dataSource, pregnancy, activeKey, empId } = this.state;
     // console.log('loading -->', isLoading)
     if (isLoading) {
       return <PageLoading />;
@@ -157,7 +160,7 @@ class App extends Component {
               <SiderMenu setItem={this.setItem} selected={selected} dataSource={dataSource} />
             </Layout.Sider>
             <Layout.Content className={styles['app-content']}>
-              <Content selected={selected} />
+              <Content selected={selected} empId={empId} />
             </Layout.Content>
           </Layout>
         ) : (

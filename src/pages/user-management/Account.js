@@ -9,7 +9,7 @@ import React, { PureComponent } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
 import moment from 'moment';
-import { request } from '@lianmed/utils';
+import request from '@lianmed/request';
 import { auth } from '../../common/utils';
 
 request.config({

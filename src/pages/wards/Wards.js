@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message, Badge } from 'antd';
-import { request } from '@lianmed/utils';
+import request from '@lianmed/request';
 import WardModal from './WardModal';
 import { auth } from '../../common/utils';
 

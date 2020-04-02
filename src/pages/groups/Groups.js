@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message } from 'antd';
-import { request } from '@lianmed/utils';
+import request from '@lianmed/request';
 import GroupModal from './GroupModal';
 
 import { auth } from '../../common/utils';

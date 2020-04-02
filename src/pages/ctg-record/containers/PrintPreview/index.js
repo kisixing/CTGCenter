@@ -87,7 +87,7 @@ class PrintPreview extends Component {
   }
 
   render() {
-    const { visible, handleOk, handleCancel, title, docId } = this.props;
+    const { visible, handleOk, handleCancel, title, docId, empId } = this.props;
     return (
       <Modal
         title={title}
@@ -100,7 +100,12 @@ class PrintPreview extends Component {
         width="98%"
         height="98%"
       >
-        <Report onDownload={this.onDownload} {...this.getPreviewData()} print_interval={20} />
+        <Report
+          onDownload={this.onDownload}
+          {...this.getPreviewData()}
+          print_interval={20}
+          empId={empId}
+        />
       </Modal>
     );
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Layout, Menu, Spin, Button, Popconfirm } from 'antd';
 import PreviewContent from '@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent';
-import { request } from '@lianmed/utils';
+import request from '@lianmed/request';
 import styles from './ReportContent.module.less';
 
 class ReportContent extends Component {

@@ -3,7 +3,7 @@ import { Modal, Menu, Spin, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent";
-import { request } from "@lianmed/utils";
+import request from '@lianmed/request';
 import styles from './ReportPreview.less';
 
 export const Context = React.createContext({});

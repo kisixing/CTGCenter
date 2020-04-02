@@ -5,7 +5,7 @@
     "build": "umi build",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
-    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages"
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages react"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.0",
