@@ -2,30 +2,30 @@ import React, { Component } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Menu } from 'antd';
 
-const { SubMenu } = Menu;
-const MENUS = [
-  {
-    id: '001',
-    title: '胎监档案',
-    href: 'http://localhost:8000/home.html',
-  },
-  {
-    id: '002',
-    title: '调度中心',
-    href: 'http://localhost:8000/control-center.html',
-  },
-  {
-    id: '0030',
-    title: '其他',
-    children: [
-      {
-        id: '0031',
-        title: '调度中心',
-        href: 'http://localhost:8000/control-center.html',
-      },
-    ],
-  },
-];
+// const { SubMenu } = Menu;
+// const MENUS = [
+//   {
+//     id: '001',
+//     title: '胎监档案',
+//     href: 'http://localhost:8000/home.html',
+//   },
+//   {
+//     id: '002',
+//     title: '调度中心',
+//     href: 'http://localhost:8000/control-center.html',
+//   },
+//   {
+//     id: '0030',
+//     title: '其他',
+//     children: [
+//       {
+//         id: '0031',
+//         title: '调度中心',
+//         href: 'http://localhost:8000/control-center.html',
+//       },
+//     ],
+//   },
+// ];
 
 export class SiderMenu extends Component {
   constructor (props) {
@@ -44,14 +44,14 @@ export class SiderMenu extends Component {
         defaultOpenKeys={['sub1']}
         mode="inline"
       >
-        <Menu.Item
+        {/* <Menu.Item
           key="001"
           title="胎监档案"
           href={`${origin}/?appId=CkLRboUsAnlSHN3qdJYwk/Zpz9X+IkjQDhgwviLu1tFkP3YxfDc0AkmUzAW6bqzF&nonce=sVQyDzQFB3JZJNEZNNbaabenIQW00ITqv51MH373ICt85JjhJFnrvWYWoD+QkCap&timestamp=VuLR52iXroudCb0DJBNqIA==&sign=F468861FAFB0285A2F5883CEB6765DBE&patId=syZXb8RXLro8u4Atz8i6ww==&empId=88888888`}
         >
           <LegacyIcon type="ordered-list" />
           <span>胎监档案</span>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item
           key="002"
           title="调度中心"
