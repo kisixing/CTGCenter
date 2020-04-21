@@ -103,8 +103,12 @@ class TableList extends Component {
         width: 220,
         render: (text, record) => {
           const ctgexam = record.ctgexam;
+          const pregnancy = record.pregnancy;
           const hasSigned = !!ctgexam.report;
           const signable = !!ctgexam.signable;
+          // 是否绑定孕妇
+          const isBind = pregnancy && pregnancy.id;
+
           return (
             <span>
               {signable && (
@@ -131,14 +135,29 @@ class TableList extends Component {
                 修改
               </a>
               <Divider type="vertical" />
-              <Popconfirm
+              {isBind && (
+                <>
+                  <Popconfirm
+                    title="确认解绑该条信息？"
+                    okText="确定"
+                    cancelText="取消"
+                    onConfirm={(e) => this.unBind(e, record)}
+                  >
+                    <a className="delete-link">
+                      解绑
+                    </a>
+                  </Popconfirm>
+                  <Divider type="vertical" />
+                </>
+              )}
+              {/* <Popconfirm
                 title="确认删除该条信息？"
                 okText="确定"
                 cancelText="取消"
                 onConfirm={() => this.deleted(record.id)}
               >
                 <a className="delete-link">删除</a>
-              </Popconfirm>
+              </Popconfirm> */}
             </span>
           );
         },
@@ -283,8 +302,8 @@ class TableList extends Component {
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize, values);
-      getRecords(values.startTime, values.endTime, pageSize, page - 1);
-      getCount(values.startTime, values.endTime);
+      getRecords(values.startTime, values.endTime, values.type, pageSize, page - 1);
+      getCount(values.startTime, values.endTime, values.type);
       savePagination({ size: pageSize, page: page - 1 });
     }
   };
@@ -293,10 +312,9 @@ class TableList extends Component {
   onShowSizeChange = (current, size) => {
     const values = this.getValues();
     // console.log('TCL: TableList -> onShowSizeChange -> current, size', values, current, size);
-
     const { getRecords, getCount, savePagination } = this.props;
-    getRecords(values.startTime, values.endTime, size, 0);
-    getCount(values.startTime, values.endTime);
+    getRecords(values.startTime, values.endTime, values.type, size, 0);
+    getCount(values.startTime, values.endTime, values.type);
     // savePagination({ size: pageSize, page: page - 1 });
     savePagination({ size: size, page: 0 });
   };
@@ -312,9 +330,17 @@ class TableList extends Component {
     if (endTime) {
       endTime = moment(endTime).format('YYYY-MM-DD');
     }
+    let t = undefined;
+    if (values.type === 'true') {
+      t = true;
+    }
+    if (values.type === 'false') {
+      t = false;
+    }
     const params = {
       startTime,
       endTime,
+      type: t
     };
     return params;
   };
@@ -337,6 +363,7 @@ class TableList extends Component {
         // const data = res.data;
         if (res.status === 200) {
           message.info('修改档案成功！');
+          this.props.getRecords();
         } else {
           message.error('修改档案失败！');
         }
@@ -346,6 +373,34 @@ class TableList extends Component {
   deleted = id => {
     const { getRecords } = this.props;
     request.delete(`/prenatal-visits/${id}`).then(res => {
+      if (res.status === 200) {
+        message.info('档案删除成功！');
+        // 刷新列表
+        getRecords();
+      } else {
+        message.error('档案删除失败！');
+      }
+    });
+  };
+
+  unBind = (e, record) => {
+    const { getRecords } = this.props;
+    e.stopPropagation();
+    request.delete(`/prenatal-visits/${record.id}`).then(res => {
+      if (res.status === 200) {
+        message.info('解绑成功！');
+        // 刷新列表
+        getRecords();
+      } else {
+        message.error('档案解绑失败！');
+      }
+    });
+  };
+
+  bind = (e, record) => {
+    e.stopPropagation();
+    const { getRecords } = this.props;
+    request.put(`/prenatal-visits/${record.id}`).then(res => {
       if (res.status === 200) {
         message.info('档案删除成功！');
         // 刷新列表

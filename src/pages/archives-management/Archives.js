@@ -69,26 +69,33 @@ class Archives extends PureComponent {
       console.log('search values', values);
       let sTime = undefined;
       let eTime = undefined;
-      let { startTime, endTime } = values;
+      let t = undefined;
+      let { startTime, endTime, type } = values;
       if (startTime) {
         sTime = moment(startTime).format('YYYY-MM-DD');
       }
       if (endTime) {
         eTime = moment(endTime).format('YYYY-MM-DD');
       }
-      this.getRecords(sTime, eTime, size, page);
-      this.getCount(sTime, eTime);
+      if (type === 'true') {
+        t = true;
+      }
+      if (type === 'false') {
+        t = false;
+      }
+      this.getRecords(sTime, eTime, t, size, page);
+      this.getCount(sTime, eTime, t);
     });
   };
 
   // search data
-  getRecords = (sTime = STARTTIME, eTime = ENDTIME, size = 10, page = 0) => {
+  getRecords = (sTime = STARTTIME, eTime = ENDTIME, t, size = 10, page = 0) => {
     // console.log('44444444444', sTime, eTime, size, page);
     const _this = this;
     _this.setState({ loading: true });
     const params = {
       'CTGExamId.specified': true,
-      'pregnancyId.specified': true,
+      'pregnancyId.specified': t, // 不要求检索已经绑定的档案列表
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
       size,
@@ -106,12 +113,12 @@ class Archives extends PureComponent {
   };
 
   // 获取总数Count
-  getCount = (sTime = STARTTIME, eTime = ENDTIME) => {
+  getCount = (sTime = STARTTIME, eTime = ENDTIME, t) => {
     // console.log('55555555', sTime, eTime)
     const _this = this;
     const params = {
       'CTGExamId.specified': true,
-      'pregnancyId.specified': true,
+      'pregnancyId.specified': t,
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
     };

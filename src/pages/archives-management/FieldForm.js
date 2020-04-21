@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Row, Col, Input, DatePicker, Button } from 'antd';
+import { Row, Col, Input, Select, DatePicker, Button } from 'antd';
+// import { compile, uncompile } from '../../common/utils';
 
 import styles from './FieldForm.less';
 moment.locale('zh-cn');
@@ -23,6 +24,7 @@ class FieldForm extends Component {
     form.setFieldsValue({
       startTime: STARTTIME,
       endTime: ENDTIME,
+      type: 'all'
     });
   }
 
@@ -101,6 +103,17 @@ class FieldForm extends Component {
             <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
                 <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择结束日期" />,
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={5}>
+            <Form.Item label="是否绑定">
+              {getFieldDecorator('type')(
+                <Select style={{ width: 120 }}>
+                  <Select.Option value="true">已绑定</Select.Option>
+                  <Select.Option value="false">未绑定</Select.Option>
+                  <Select.Option value="all">全部</Select.Option>
+                </Select>,
               )}
             </Form.Item>
           </Col>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Descriptions, Badge } from 'antd';
 import CustomTable from './CustomTable';
-import { getUrlParam, account, auth } from '../../common/utils';
+import { getUrlParam, account, auth, compile } from '../../common/utils';
 import request from '../../common/request';
 import styles from './index.less';
 
@@ -18,7 +18,7 @@ class TaskLog extends Component {
       const params = getUrlParam();
       account.set(params);
       return request
-        .post('/authenticate', {
+        .post('/encryptedauthenticate', {
           username: params.auth_user,
           token: params.auth_token,
           password: params.auth_password,
@@ -30,7 +30,7 @@ class TaskLog extends Component {
           _this.fetchPlanLogs();
         })
         .catch(function(error) {
-          console.info('/authenticate', error);
+          console.info('/encryptedauthenticate', error);
         });
     }
   }

@@ -25,7 +25,7 @@ class App extends Component {
     const _this = this;
 
     request
-      .post('/authenticate', {
+      .post('/encryptedauthenticate', {
         username: 'admin',
         password: 'admin',
       })
@@ -39,7 +39,7 @@ class App extends Component {
         _this.fetch();
       })
       .catch(function(error) {
-        console.log('api/authenticate', error);
+        console.log('api/encryptedauthenticate', error);
       });
 
     this.interval = setInterval(() => this.fetch(), 10000);

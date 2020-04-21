@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Row, Input } from 'antd';
-import { auth } from '../../common/utils';
+import { auth, compile } from '../../common/utils';
 import request from '../../common/request';
 import config from '../../common/config';
 
@@ -25,9 +25,9 @@ class Login extends PureComponent {
         return;
       }
       request
-        .post('/authenticate', {
-          username: values.username,
-          password: values.password,
+        .post('/encryptedauthenticate', {
+          username: compile(values.username),
+          password: compile(values.password),
         })
         .then(function(response) {
           const access_token = response.data.id_token;
@@ -37,7 +37,7 @@ class Login extends PureComponent {
         })
         .catch(function(error) {
           _this.setState({ loading: false });
-          console.log('api/authenticate', error);
+          console.log('api/encryptedauthenticate', error);
         });
     });
   };
