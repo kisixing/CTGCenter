@@ -5,7 +5,7 @@ import { event } from '@lianmed/utils';
 import moment from "moment";
 // import { parse, stringify } from 'qs';
 import request from "../../common/request";
-import { auth, getUrlParam } from '../../common/utils';
+import { auth, getUrlParam, compile } from '../../common/utils';
 
 // import 'antd/dist/antd.css';
 import SiderMenu from "./containers/SiderMenu";
@@ -46,9 +46,9 @@ class App extends Component {
   }
 
   fetchAuth = () => {
-    const ACCOUNT = window.CONFIG.account;
+    const ACCOUNT = { username: compile('admin'), password: compile('admin') };
     request
-      .post('/authenticate', {
+      .post('/encryptedencryptedauthenticate', {
         username: ACCOUNT.username,
         password: ACCOUNT.password,
       })
@@ -64,7 +64,7 @@ class App extends Component {
         });
       })
       .catch(function(error) {
-        console.log('api/authenticate', error);
+        console.log('api/encryptedencryptedauthenticate', error);
       });
   };
 

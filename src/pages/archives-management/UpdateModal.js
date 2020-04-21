@@ -42,7 +42,7 @@ const CreateRecordModal = Form.create({
       super(props);
       this.state = {
         errorText: '',
-        disabled: true,
+        disabled: false,
         pregnancyList: [],
         isSubmit: false,
         selected: {}
@@ -51,9 +51,8 @@ const CreateRecordModal = Form.create({
 
     componentDidMount() {
       const { form, type, dataSource } = this.props;
-      const { pregnancy = {}, gestationalWeek } = dataSource;
-      console.log('555555555555555555', dataSource)
-      if (type === 'edit' && pregnancy.id) {
+      const pregnancy = dataSource.pregnancy || {};
+      if (type === 'edit') {
         form.setFieldsValue({
           // gestationalWeek: gestationalWeek,
           age: pregnancy.age,

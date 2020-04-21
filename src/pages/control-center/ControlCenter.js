@@ -26,7 +26,7 @@ class ControlCenter extends Component {
       const url_params = getUrlParam();
       account.set(url_params);
       return request
-        .post('/authenticate', {
+        .post('/encryptedauthenticate', {
           username: url_params.auth_user,
           token: url_params.auth_token,
           password: url_params.auth_password,
@@ -39,7 +39,7 @@ class ControlCenter extends Component {
           _this.fetchPlans();
         })
         .catch(function(error) {
-          console.info('/authenticate', error);
+          console.info('/encryptedauthenticate', error);
         });
     }
   }
