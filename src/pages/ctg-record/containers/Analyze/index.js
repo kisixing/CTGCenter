@@ -24,7 +24,10 @@ class Analyze extends Component {
         wrapClassName={styles.modal}
         maskClosable={false}
       >
-        <Analyse docid={docId} />
+        <Analyse docid={docId} onDownload={(url) => {
+          const filePath = `${window.CONFIG.baseURL}${url}`;
+          window.open(filePath);
+        }} />
       </Modal>
     );
   }
