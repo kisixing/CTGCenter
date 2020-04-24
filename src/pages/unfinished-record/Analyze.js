@@ -22,7 +22,10 @@ class Analyze extends Component {
         width="98%"
         height="98%"
       >
-        <Analyse docid={docId} />
+        <Analyse docid={docId} onDownload={(url) => {
+          const filePath = `${window.CONFIG.baseURL}${url}`;
+          window.open(filePath);
+        }} />
       </Modal>
     );
   }
