@@ -5,7 +5,7 @@ import moment from 'moment';
 import SiderMenu from './SiderMenu';
 import Content from './Content';
 import request from '../../common/request';
-import { getUrlParam, auth } from '../../common/utils';
+import { getUrlParam, auth, compile } from '../../common/utils';
 import styles from './App.less';
 
 
@@ -26,27 +26,30 @@ class App extends Component {
 
     request
       .post('/encryptedauthenticate', {
-        username: 'admin',
-        password: 'admin',
+        username: compile('admin'),
+        password: compile('admin'),
       })
       .then(function(response) {
         const access_token = response.data.id_token;
+        console.log('444444444', access_token);
         auth.set(access_token);
         r.config({
           Authorization: access_token,
           prefix: window.CONFIG.baseURL,
         });
-        _this.fetch();
+        if (access_token) {
+          _this.fetch();
+        }
       })
       .catch(function(error) {
         console.log('api/encryptedauthenticate', error);
       });
 
-    this.interval = setInterval(() => this.fetch(), 10000);
+    // this.interval = setInterval(() => this.fetch(), 10000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   // 定时器

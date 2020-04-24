@@ -2,7 +2,6 @@ import axios from 'axios';
 import { notification } from 'antd';
 import { auth } from './utils';
 
-const AUTH_TOKEN = auth.get();
 const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
 
 const URL = window.CONFIG.baseURL;
@@ -17,7 +16,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function(config) {
     const url = config.url.split('?')[0];
-
+    const AUTH_TOKEN = auth.get();
     const isCarry = !NO_TOKEN_LIST.includes(url);
     config.headers = {
       'Content-Type': 'application/json;charset=UTF-8',

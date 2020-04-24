@@ -77,10 +77,10 @@ class Login extends PureComponent {
               <Button type="primary" onClick={this.handleOk} loading={loading}>
                 登录
               </Button>
-              <p>
+              {/* <p>
                 <span>Username：admin</span>
                 <span>Password: admin</span>
-              </p>
+              </p> */}
             </Row>
           </form>
         </div>

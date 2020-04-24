@@ -21,23 +21,23 @@ class TaskLog extends Component {
       // 如果存在LIAN_MED_ACCESS_TOKEN则不重新做用户验证
       _this.fetchPlans();
     } else {
-      const params = getUrlParam();
-      account.set(params);
-      return request
-        .post('/encryptedauthenticate', {
-          username: params.auth_user,
-          token: params.auth_token,
-          password: params.auth_password,
-        })
-        .then(function(response) {
-          const access_token = response.data.id_token;
-          auth.set(access_token);
-          // 验证成功后
-          _this.fetchPlans();
-        })
-        .catch(function(error) {
-          console.info('/encryptedauthenticate', error);
-        });
+      // const params = getUrlParam();
+      // account.set(params);
+      // return request
+      //   .post('/encryptedauthenticate', {
+      //     username: params.auth_user,
+      //     token: params.auth_token,
+      //     password: params.auth_password,
+      //   })
+      //   .then(function(response) {
+      //     const access_token = response.data.id_token;
+      //     auth.set(access_token);
+      //     // 验证成功后
+      //     _this.fetchPlans();
+      //   })
+      //   .catch(function(error) {
+      //     console.info('/encryptedauthenticate', error);
+      //   });
     }
   }
 

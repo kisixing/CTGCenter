@@ -107,6 +107,7 @@ const EditableTable = (props: any) => {
     useEffect(() => {
         // 获取病区详细列表
         fetchOptions();
+        fetchData();
     }, []);
 
     const fetchOptions = () => {
@@ -117,7 +118,6 @@ const EditableTable = (props: any) => {
       const params = stringify({ sort: 'deviceno,asc', ...data });
       request.get(`/bedinfos/?${params}`).then(d => setDd(d))
     }
-    useLogin(fetchData)
 
     const columns = [
       ...[
