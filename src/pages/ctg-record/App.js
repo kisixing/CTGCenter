@@ -48,7 +48,7 @@ class App extends Component {
   fetchAuth = () => {
     const ACCOUNT = { username: compile('admin'), password: compile('admin') };
     request
-      .post('/encryptedencryptedauthenticate', {
+      .post('/encryptedauthenticate', {
         username: ACCOUNT.username,
         password: ACCOUNT.password,
       })
@@ -64,7 +64,7 @@ class App extends Component {
         });
       })
       .catch(function(error) {
-        console.log('api/encryptedencryptedauthenticate', error);
+        console.log('api/encryptedauthenticate', error);
       });
   };
 

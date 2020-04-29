@@ -31,7 +31,6 @@ class App extends Component {
       })
       .then(function(response) {
         const access_token = response.data.id_token;
-        console.log('444444444', access_token);
         auth.set(access_token);
         r.config({
           Authorization: access_token,

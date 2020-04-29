@@ -22,6 +22,9 @@ instance.interceptors.request.use(
       'Content-Type': 'application/json;charset=UTF-8',
       Authorization: isCarry ? AUTH_TOKEN : '',
     };
+    // if (AUTH_TOKEN) {
+    //   config.headers.Authorization = AUTH_TOKEN;
+    // }
     return config;
   },
   function(error) {
