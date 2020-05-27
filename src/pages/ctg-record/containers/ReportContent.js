@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Layout, Menu, Spin, Button, Popconfirm } from 'antd';
 import PreviewContent from '@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent';
 import request from '@lianmed/request';
+import { URL } from '../../../common/utils';
 import styles from './ReportContent.module.less';
 
 class ReportContent extends Component {
@@ -63,7 +64,7 @@ class ReportContent extends Component {
   };
 
   onDownload = (id) => {
-    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${id}`;
+    const filePath = `${URL}/api/ctg-exams-pdfurl/${id}`;
     window.open(filePath);
   };
 

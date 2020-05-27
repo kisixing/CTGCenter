@@ -13,7 +13,7 @@ import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import SearchForm from './SearchForm';
 import useLogin from "./useLogin";
-import { auth } from '../../common/utils';
+import { auth, URL } from '../../common/utils';
 import styles from './index.less';
 
 const mapStatusToText = {
@@ -23,7 +23,8 @@ const mapStatusToText = {
 };
 request.config({
   Authorization: auth.get(),
-  prefix: window.CONFIG.baseURL,
+  // prefix: window.CONFIG.baseURL,
+  prefix: `${URL}/api`,
 });
 
 const EditableContext = React.createContext<WrappedFormUtils>(null);

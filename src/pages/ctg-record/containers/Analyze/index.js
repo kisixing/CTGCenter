@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal } from "antd";
 import 'antd/es/input-number/style/css';
 import styles from "./index.module.less";
+import { URL } from '../../../../common/utils'
 import { Ctg_Analyse as Analyse } from "@lianmed/pages";
 class Analyze extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class Analyze extends Component {
         maskClosable={false}
       >
         <Analyse docid={docId} onDownload={(url) => {
-          const filePath = `${window.CONFIG.baseURL}${url}`;
+          const filePath = `${URL}/api/${url}`;
           window.open(filePath);
         }} />
       </Modal>

@@ -10,11 +10,12 @@ import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
 import moment from 'moment';
 import request from '@lianmed/request';
-import { auth } from '../../common/utils';
+import { auth, URL } from '../../common/utils';
 
 request.config({
   Authorization: auth.get(),
-  prefix: window.CONFIG.baseURL,
+  // prefix: window.CONFIG.baseURL,
+  prefix: `${URL}/api`,
 });
 
 class Account extends PureComponent {

@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent";
 import request from '@lianmed/request';
+import { URL } from '../../common/utils';
 import styles from './ReportPreview.less';
 
 export const Context = React.createContext({});
@@ -107,7 +108,7 @@ function ReportPreview(props) {
     const reportId = currentReport.bizSn;
     // const filePath = `/ctg-exams-pdfurl/${reportId}`;
     // request.get(filePath);
-    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${reportId}`;
+    const filePath = `${URL}/api/ctg-exams-pdfurl/${reportId}`;
     window.open(filePath);
   };
 

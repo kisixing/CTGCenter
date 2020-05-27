@@ -5,7 +5,7 @@ import { event } from '@lianmed/utils';
 import moment from "moment";
 // import { parse, stringify } from 'qs';
 import request from "../../common/request";
-import { auth, getUrlParam, compile } from '../../common/utils';
+import { auth, getUrlParam, compile, URL } from '../../common/utils';
 
 // import 'antd/dist/antd.css';
 import SiderMenu from "./containers/SiderMenu";
@@ -39,7 +39,8 @@ class App extends Component {
     // 组件专有request
     r.config({
       Authorization: AUTH_TOKEN,
-      prefix: window.CONFIG.baseURL,
+      // prefix: window.CONFIG.baseURL,
+      prefix: `${URL}/api`,
     });
 
     event.on('signed', this.fetchList);
@@ -60,7 +61,8 @@ class App extends Component {
 
         r.config({
           Authorization: access_token,
-          prefix: window.CONFIG.baseURL,
+          // prefix: window.CONFIG.baseURL,
+          prefix: `${URL}/api`,
         });
       })
       .catch(function(error) {

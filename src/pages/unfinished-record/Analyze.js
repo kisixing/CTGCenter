@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
+import { URL } from '../../common/utils';
 import 'antd/es/input-number/style/css';
 
 import { Ctg_Analyse as Analyse } from '@lianmed/pages';
@@ -23,7 +24,7 @@ class Analyze extends Component {
         height="98%"
       >
         <Analyse docid={docId} onDownload={(url) => {
-          const filePath = `${window.CONFIG.baseURL}${url}`;
+          const filePath = `${URL}/api/${url}`;
           window.open(filePath);
         }} />
       </Modal>
