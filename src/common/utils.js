@@ -1,5 +1,8 @@
 import store from './store';
 
+// const URL_1 = window.CONFIG ? window.CONFIG.baseURL : URL;
+export const URL = window.CONFIG ? window.CONFIG.baseURL : `${window.location.protocol}//${window.location.host}`;
+
 /**
  * 获取指定某个url参数值
  * @param {string} name

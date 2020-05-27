@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Modal, Input, Select, Button } from 'antd';
+import request from '@lianmed/request';
+import { auth, URL } from '../../common/utils';
+
+request.config({
+  Authorization: auth.get(),
+  prefix: `${URL}/api`,
+});
 
 class GroupModal extends Component {
+  state = { authorities: []}
+
+  componentDidMount() {
+    this.fetchAuth()
+  }
+
+  fetchAuth = () => {
+    request.get('/users/authorities').then(res => {
+      this.setState({ authorities: res });
+    });
+  }
+
   render() {
     const { title, visible, onCancel, onOk, form, loading } = this.props;
+    const { authorities } = this.state;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -46,6 +66,9 @@ class GroupModal extends Component {
               <Select mode="multiple" placeholder="请输入病区类型">
                 {/* <Select.Option value="in">住院</Select.Option>
                 <Select.Option value="out">门诊</Select.Option> */}
+                {
+                  authorities && authorities.map(e => <Select.Option value={e}>{e}</Select.Option>)
+                }
               </Select>,
             )}
           </Form.Item>

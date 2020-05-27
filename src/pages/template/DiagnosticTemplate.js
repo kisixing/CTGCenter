@@ -9,12 +9,13 @@ import React, { useState, useEffect } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Card, Table, Divider, Popconfirm, Button, message } from 'antd';
 import  request  from '@lianmed/request';
-import { auth } from '../../common/utils';
+import { auth, URL } from '../../common/utils';
 import DiagnosticTemplateModal from './DiagnosticTemplateModal';
 
 request.config({
   Authorization: auth.get(),
-  prefix: window.CONFIG.baseURL,
+  // prefix: window.CONFIG.baseURL,
+  prefix: `${URL}/api`,
 });
 
 export default function DiagnosticTemplate() {

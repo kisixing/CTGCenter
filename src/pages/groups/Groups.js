@@ -4,12 +4,11 @@ import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message } from 'antd';
 import request from '@lianmed/request';
 import GroupModal from './GroupModal';
-
-import { auth } from '../../common/utils';
+import { auth, URL } from '../../common/utils';
 
 request.config({
   Authorization: auth.get(),
-  prefix: window.CONFIG.baseURL,
+  prefix: `${URL}/api`,
 });
 
 export default class Groups extends Component {

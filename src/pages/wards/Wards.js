@@ -4,11 +4,12 @@ import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message, Badge } from 'antd';
 import request from '@lianmed/request';
 import WardModal from './WardModal';
-import { auth } from '../../common/utils';
+import { auth, URL } from '../../common/utils';
 
 request.config({
   Authorization: auth.get(),
-  prefix: window.CONFIG.baseURL,
+  // prefix: window.CONFIG.baseURL,
+  prefix: `${URL}/api`,
 });
 
 class Wards extends Component {

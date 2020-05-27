@@ -1,9 +1,10 @@
 import axios from "axios";
 import { notification } from "antd";
+import { URL } from '../../../common/utils';
 
-const URL = window.CONFIG.baseURL;
+// const URL = window.CONFIG.baseURL;
 const instance = axios.create({
-  baseURL: URL
+  baseURL: `${URL}/api`
 });
 
 instance.defaults.timeout = 5000;

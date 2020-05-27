@@ -4,6 +4,7 @@ import { Modal } from 'antd';
 import { Ctg_Report as Report } from '@lianmed/pages';
 import moment from 'moment';
 import { pdfjs } from 'react-pdf';
+import { URL } from '../../common/utils';
 
 const pdf_worker_url =
   process.env.NODE_ENV === 'development'
@@ -67,7 +68,7 @@ class PrintPreview extends Component {
   }
 
   onDownload = () => {
-    const filePath = `${window.CONFIG.baseURL}/ctg-exams-pdfurl/${this.props.docId}`;
+    const filePath = `${URL}/api/ctg-exams-pdfurl/${this.props.docId}`;
     window.open(filePath);
   };
 

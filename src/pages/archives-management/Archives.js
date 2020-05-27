@@ -4,7 +4,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import r from '@lianmed/request';
 import request from '../../common/request';
-import { transformsCTG, auth } from '../../common/utils';
+import { transformsCTG, auth, URL } from '../../common/utils';
 
 import CurveChart from './CurveChart';
 import FieldForm from './FieldForm';
@@ -43,7 +43,8 @@ class Archives extends PureComponent {
     //
     r.config({
       Authorization: auth.get(),
-      prefix: window.CONFIG.baseURL,
+      // prefix: window.CONFIG.baseURL,
+      prefix: `${URL}/api`,
     });
   }
 

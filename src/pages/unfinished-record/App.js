@@ -5,7 +5,7 @@ import moment from 'moment';
 import SiderMenu from './SiderMenu';
 import Content from './Content';
 import request from '../../common/request';
-import { getUrlParam, auth, compile } from '../../common/utils';
+import { getUrlParam, auth, compile, URL } from '../../common/utils';
 import styles from './App.less';
 
 
@@ -20,7 +20,8 @@ class App extends Component {
   componentDidMount() {
     r.config({
       Authorization: auth.get(),
-      prefix: window.CONFIG.baseURL,
+      // prefix: window.CONFIG.baseURL,
+      prefix: `${URL}/api`,
     });
     const _this = this;
 
@@ -34,7 +35,8 @@ class App extends Component {
         auth.set(access_token);
         r.config({
           Authorization: access_token,
-          prefix: window.CONFIG.baseURL,
+          // prefix: window.CONFIG.baseURL,
+          prefix: `${URL}/api`,
         });
         if (access_token) {
           _this.fetch();

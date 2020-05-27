@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { notification } from 'antd';
-import { auth } from './utils';
+import { auth, URL } from './utils';
 
 const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
 
-const URL = window.CONFIG.baseURL;
+// const base = `${window.location.host}/api`;
 const instance = axios.create({
-  baseURL: URL,
+  baseURL: `${URL}/api`,
   timeout: 5000,
 });
 
