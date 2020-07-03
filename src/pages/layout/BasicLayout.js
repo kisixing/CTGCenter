@@ -13,7 +13,7 @@ class BasicLayout extends Component {
     super(props);
     this.state = {
       loading: false, // 菜单切换时模拟600ms loading
-      
+
       src: `${window.location.origin}/control-center.html?auth_user=admin&auth_token=SLX9FT0&pregnancyId=8`,
     };
   }
@@ -35,6 +35,7 @@ class BasicLayout extends Component {
 
   render() {
     const { loading, src } = this.state;
+    const { token } = this.props;
     return (
       <Layout className={styles.container}>
         <Header id="header" className={styles.header}>CTG MPA 管理服务后台</Header>
@@ -43,7 +44,7 @@ class BasicLayout extends Component {
             <SiderMenu handleClick={this.menuClick} />
           </Sider>
           <Content className={styles.content}>
-            <Iframe url={src} spinning={loading} />
+            <Iframe url={src} spinning={loading} token={token} />
           </Content>
         </Layout>
       </Layout>

@@ -11,7 +11,6 @@ export const LoginPannel = ({ handleOk }) => {
   const [loading, setLoading] = useState(false)
 
   const submit = () => {
-    debugger
     form.validateFields().then(values => {
       setLoading(true)
 

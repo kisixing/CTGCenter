@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { notification } from 'antd';
 import { auth, URL } from './utils';
-
+import request from "@lianmed/request";
 const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
 
 // const base = `${window.location.host}/api`;
@@ -10,6 +10,7 @@ const instance = axios.create({
   baseURL: `${URL}/api`,
   timeout: 5000,
 });
+request.config({prefix:`${URL}/api`})
 
 // instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 

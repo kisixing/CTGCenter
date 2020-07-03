@@ -7,24 +7,21 @@ import { Modal, Form } from 'antd';
 import { LoginPannel } from "../login/Login";
 const TOKEN_KEY = request.TOKEN_KEY
 function App(props) {
-  const [spinning, setSpinning] = useState(!!localStorage.getItem(TOKEN_KEY))
-  const [isLogin, setIsLogin] = useState()
-  const [modalVisible, setModalVisible] = useState(false)
+  const [spinning, setSpinning] = useState(true)
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY))
   const handleOk = (token) => {
     localStorage.setItem(TOKEN_KEY, token)
-    setIsLogin(true)
+    setToken(token)
   }
   useEffect(() => {
     setSpinning(false)
-    if (!isLogin) {
-      setModalVisible(true)
-    }
-  }, [isLogin])
+
+  }, [token])
   return (
     <>
       <Loader fullScreen spinning={spinning} />
-      <BasicLayout />
-      <Modal footer={null} visible={modalVisible} width={400}>
+      <BasicLayout token={token} />
+      <Modal footer={null} visible={!token} width={400}>
         <LoginPannel handleOk={handleOk} />
       </Modal>
     </>

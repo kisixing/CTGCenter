@@ -3,10 +3,14 @@ import styles from './index.css';
 import { useEffect } from 'react';
 
 function App() {
+
   useEffect(() => {
     const receiveMessage = (event) => {
 
-      console.log(event.data);//孩子, 我来看你了
+      if (event.data) {
+        console.log(event.data);//孩子, 我来看你了
+
+      }
 
     };
     window.addEventListener('message', receiveMessage, false);
