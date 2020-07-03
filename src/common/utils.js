@@ -1,5 +1,6 @@
 import store from './store';
 
+// const isDev = process.env.NODE_ENV === 'development';
 // const URL_1 = window.CONFIG ? window.CONFIG.baseURL : URL;
 export const URL = window.CONFIG ? window.CONFIG.baseURL : `${window.location.protocol}//${window.location.host}`;
 
@@ -21,7 +22,7 @@ export function getUrlParam(name) {
     // const obj = { [key] : value};
     params[key] = value;
   }
-  // console.log('11111111111111', query, params);
+
   // 传参时，取指定参数
   if (name) {
     const value = params[name]

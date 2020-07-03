@@ -5,6 +5,7 @@ import { auth, URL } from './utils';
 const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
 
 // const base = `${window.location.host}/api`;
+
 const instance = axios.create({
   baseURL: `${URL}/api`,
   timeout: 5000,

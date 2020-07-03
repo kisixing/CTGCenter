@@ -89,7 +89,7 @@ class PrintPreview extends Component {
 
   render() {
     const { visible, handleOk, handleCancel, title } = this.props;
-    console.log('988989898989898', this.getPreviewData());
+    // console.log('988989898989898', this.getPreviewData());
     return (
       <Modal
         title={title}
