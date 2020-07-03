@@ -20,17 +20,9 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["./"]
-  // "exclude": [
-  //   "node_modules",
-  //   "build",
-  //   "scripts",
-  //   "acceptance-tests",
-  //   "webpack",
-  //   "jest",
-  //   "src/setupTests.ts",
-  //   "tslint:latest",
-  //   "tslint-config-prettier"
-  // ]
+  "include": ["./"],
+  "exclude": [
+    "node_modules",
+  ]
   // "files": ["./pages/workbench/CustomForm1/test.tsx"]
 }

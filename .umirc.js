@@ -114,7 +114,13 @@ export default {
             {
               context: { title: '模板管理' }
             }
-          ]
+          ],
+          setting: [
+            './src/pages/setting',
+            {
+              context: { title: '参数设置' }
+            }
+          ],
         },
         html: {
           template: './src/common/document.ejs',

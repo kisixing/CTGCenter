@@ -124,6 +124,10 @@ export class SiderMenu extends Component {
           <LegacyIcon type="copy" />
           <span>模板管理</span>
         </Menu.Item>
+        <Menu.Item key="014" title="模板管理" href={`${origin}/setting.html`}>
+          <LegacyIcon type="copy" />
+          <span>参数设置</span>
+        </Menu.Item>
       </Menu>
     );
   }

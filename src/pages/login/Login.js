@@ -1,99 +1,81 @@
-import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Row, Input } from 'antd';
-import { auth, compile } from '../../common/utils';
-import request from '../../common/request';
+import { Button, Form, Input, Row } from 'antd';
+import React, { Fragment, useState } from 'react';
 import config from '../../common/config';
-
+import request from '../../common/request';
+import { auth, compile } from '../../common/utils';
 import styles from './Login.less';
+
 const FormItem = Form.Item;
+export const LoginPannel = ({ handleOk }) => {
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState(false)
 
-class Login extends PureComponent {
-  state = {
-    loading: false,
-  };
+  const submit = () => {
+    debugger
+    form.validateFields().then(values => {
+      setLoading(true)
 
-  handleOk = () => {
-    const _this = this;
-    const { form } = this.props;
-    const { validateFieldsAndScroll } = form;
-    _this.setState({ loading: true });
-    validateFieldsAndScroll((errors, values) => {
-      if (errors) {
-        return;
-      }
       request
         .post('/encryptedauthenticate', {
           username: compile(values.username),
           password: compile(values.password),
         })
-        .then(function(response) {
+        .then(function (response) {
           const access_token = response.data.id_token;
-          auth.set(access_token);
-          _this.setState({ loading: false });
-          window.location.href = `${window.location.origin}/dashboard.html`;
+          handleOk(access_token)
         })
-        .catch(function(error) {
-          _this.setState({ loading: false });
+        .catch(function (error) {
           console.log('api/encryptedauthenticate', error);
-        });
+        })
+        .finally(() => {
+          setLoading(false)
+        })
     });
+  }
+  return (
+    <div style={{padding:12}}>
+      <div className={styles.logo}>
+        <img alt="logo" src={config.logoPath} />
+        <span>{config.siteName}</span>
+      </div>
+      <Form form={form} defaultValue={{username:'',password:''}}>
+        <FormItem hasFeedback name="username" rules={[{ required: true }]}>
+
+          <Input onPressEnter={submit} placeholder="输入用户名" />
+        </FormItem>
+        <FormItem hasFeedback name="password" rules={[{ required: true }]}>
+          <Input type="password" onPressEnter={submit} placeholder="输入密码" />
+        </FormItem>
+        <Row>
+          <Button block  type="primary" onClick={submit} loading={loading}>
+            <span>登录</span>
+          </Button>
+          {/* <p>
+          <span>Username：admin</span>
+          <span>Password: admin</span>
+        </p> */}
+        </Row>
+      </Form>
+    </div>
+  )
+}
+function Login(props) {
+
+  const handleOk = (access_token) => {
+    auth.set(access_token);
+    window.location.href = `${window.location.origin}/dashboard.html`;
   };
 
-  render() {
-    const { loading } = this.state;
-    const { form } = this.props;
-    const { getFieldDecorator } = form;
-
-    return (
-      <Fragment>
-        <div className={styles.form}>
-          <div className={styles.logo}>
-            <img alt="logo" src={config.logoPath} />
-            <span>{config.siteName}</span>
-          </div>
-          <form>
-            <FormItem hasFeedback>
-              {getFieldDecorator('username', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-              })(<Input onPressEnter={this.handleOk} placeholder="输入用户名" />)}
-            </FormItem>
-            <FormItem hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-              })(<Input type="password" onPressEnter={this.handleOk} placeholder="输入密码" />)}
-            </FormItem>
-            <Row>
-              <Button type="primary" onClick={this.handleOk} loading={loading}>
-                登录
-              </Button>
-              {/* <p>
-                <span>Username：admin</span>
-                <span>Password: admin</span>
-              </p> */}
-            </Row>
-          </form>
-        </div>
-        <div className={styles.footer}></div>
-      </Fragment>
-    );
-  }
+  return (
+    <Fragment>
+      <div className={styles.form}>
+        <LoginPannel handleOk={handleOk} />
+      </div>
+      <div className={styles.footer}></div>
+    </Fragment>
+  );
 }
 
-Login.propTypes = {
-  form: PropTypes.object,
-  dispatch: PropTypes.func,
-  loading: PropTypes.object,
-};
 
-export default Form.create()(Login);
+
+export default Login
