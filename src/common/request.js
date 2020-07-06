@@ -11,7 +11,7 @@ const instance = axios.create({
   timeout: 5000,
 });
 request.config({prefix:`${URL}/api`})
-
+console.log('request1',request)
 // instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 // http request 拦截器
@@ -123,3 +123,4 @@ instance.interceptors.response.use(
 );
 
 export default instance;
+export {request}

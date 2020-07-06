@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom';
 import styles from './index.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { request } from '../../common/request';
+import { Table } from 'antd';
 
 function App() {
-
+  const [list, setList] = useState([])
   useEffect(() => {
     const receiveMessage = (event) => {
 
@@ -14,11 +16,20 @@ function App() {
 
     };
     window.addEventListener('message', receiveMessage, false);
+
+    request.get('/runtime-properties/').then(r => {
+      setList(r)
+    })
   }, [])
   return (
     <div className={styles.normal}>
-      <div className={styles.welcome} />
-      设置页面
+      
+      <Table dataSource={list} size="small" bordered columns={[
+        {title:'字段名',dataIndex:'key'},
+        {title:'值',dataIndex:'value'},
+      ]}>
+
+      </Table>
     </div>
   );
 }
