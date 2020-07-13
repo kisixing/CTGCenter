@@ -34,7 +34,8 @@ class SiderMenu extends Component {
         {dataSource.map(item => {
           return (
             <Menu.Item key={item.id} data={item} className={styles.item}>
-              <div>{item.visitTime || item.visitDate}</div>
+              <div>{item.visitTime || item.visitDate}<span>({!!(item.pregnancy && item.pregnancy.inpatientNO)?'住院':'门诊'})</span></div>
+              
             </Menu.Item>
           );
         })}

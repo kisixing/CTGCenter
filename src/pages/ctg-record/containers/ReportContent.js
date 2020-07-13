@@ -37,7 +37,7 @@ class ReportContent extends Component {
     for (let i = 0; i < data.length; i++) {
       const visitDate = data[i]['visitDate'];
       const element = data[i]['ctgexam'];
-      ctgexam.push({ ...element, visitDate });
+      ctgexam.push({ ...element, visitDate, isIn: !!(data[i].pregnancy && data[i].pregnancy.inpatientNO) });
     }
     return ctgexam;
   };
@@ -124,20 +124,21 @@ class ReportContent extends Component {
   };
 
   renderMenus = data => {
-    const childrenLoop = children => {
+    const childrenLoop = (children,isIn) => {
       return children.map(e => {
         const { bizSn, archived, valid, time } = e;
         return (
           <Menu.Item key={bizSn} data={e} className={styles.item}>
-            <div>{bizSn}</div>
+            <div>{bizSn}<span>({isIn ? '住院' : '门诊'})</span></div>
           </Menu.Item>
         );
       });
     };
     const loop = dataSource => {
+      console.log('loop', dataSource)
       // eslint-disable-next-line array-callback-return
       return dataSource.map(item => {
-        const { visitDate, report, id } = item;
+        const { visitDate, report, id, isIn } = item;
         // return (
         //   <Menu.ItemGroup
         //     key={id}
@@ -147,7 +148,7 @@ class ReportContent extends Component {
         //   </Menu.ItemGroup>
         // );
         if (report && report.length) {
-          return childrenLoop(report);
+          return childrenLoop(report,isIn);
         }
       });
     };
@@ -183,14 +184,14 @@ class ReportContent extends Component {
                   撤销归档
                 </Button>
               ) : (
-                <Button
-                  loading={archiveLoading}
-                  type="primary"
-                  onClick={() => this.doArchiving(bizSn)}
-                >
-                  归档
-                </Button>
-              )}
+                  <Button
+                    loading={archiveLoading}
+                    type="primary"
+                    onClick={() => this.doArchiving(bizSn)}
+                  >
+                    归档
+                  </Button>
+                )}
               <Popconfirm
                 title={`确认删除档案号为${currentReport.bizSn}的报告吗？`}
                 placement="topRight"

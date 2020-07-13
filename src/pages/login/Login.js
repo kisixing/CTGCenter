@@ -21,6 +21,7 @@ export const LoginPannel = ({ handleOk }) => {
         })
         .then(function (response) {
           const access_token = response.data.id_token;
+          auth.set(access_token);
           handleOk(access_token)
         })
         .catch(function (error) {
