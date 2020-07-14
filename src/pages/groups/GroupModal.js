@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Modal, Input, Select, Button } from 'antd';
-import request from '@lianmed/request';
+import { request } from '../../common/request';
+
 import { auth, URL } from '../../common/utils';
 
 // request.config({

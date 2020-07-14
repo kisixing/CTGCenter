@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Input, Popconfirm, Button, Select, message } from 'antd';
-import request from "@lianmed/request";
+import { request } from "../../common/request";
 import { stringify } from 'qs';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import SearchForm from './SearchForm';
