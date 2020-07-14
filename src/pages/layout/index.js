@@ -16,7 +16,7 @@ function App(props) {
   }
   useEffect(() => {
     setSpinning(false)
-    request.config({ Authorization: token })
+    // request.config({ Authorization: token })
     request.get('/account').catch(() => {
       token && setToken(null)
     })
@@ -25,7 +25,7 @@ function App(props) {
     <>
       <Loader fullScreen spinning={spinning} />
       <BasicLayout token={token} />
-      <Modal footer={null} visible={!token} width={400}>
+      <Modal footer={null} visible={false} width={400}>
         <LoginPannel handleOk={handleOk} />
       </Modal>
     </>

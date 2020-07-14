@@ -18,11 +18,11 @@ class App extends Component {
   };
 
   componentDidMount() {
-    r.config({
-      Authorization: auth.get(),
-      // prefix: window.CONFIG.baseURL,
-      prefix: `${URL}/api`,
-    });
+    // r.config({
+    //   Authorization: auth.get(),
+    //   // prefix: window.CONFIG.baseURL,
+    //   prefix: `${URL}/api`,
+    // });
     const _this = this;
 
     request
@@ -33,11 +33,11 @@ class App extends Component {
       .then(function(response) {
         const access_token = response.data.id_token;
         auth.set(access_token);
-        r.config({
-          Authorization: access_token,
-          // prefix: window.CONFIG.baseURL,
-          prefix: `${URL}/api`,
-        });
+        // r.config({
+        //   Authorization: access_token,
+        //   // prefix: window.CONFIG.baseURL,
+        //   prefix: `${URL}/api`,
+        // });
         if (access_token) {
           _this.fetch();
         }

@@ -12,11 +12,11 @@ import moment from 'moment';
 import request from '@lianmed/request';
 import { auth, URL } from '../../common/utils';
 
-request.config({
-  Authorization: auth.get(),
-  // prefix: window.CONFIG.baseURL,
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   // prefix: window.CONFIG.baseURL,
+//   prefix: `${URL}/api`,
+// });
 
 class Account extends PureComponent {
   index = 0;

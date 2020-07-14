@@ -6,9 +6,9 @@ import request from '@lianmed/request';
 import { URL } from '../../../common/utils';
 import styles from './ReportContent.module.less';
 
-request.config({
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   prefix: `${URL}/api`,
+// });
 
 class ReportContent extends Component {
   static propTypes = {};

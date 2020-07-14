@@ -1,5 +1,6 @@
 import store from './store';
-
+import { TOKEN_KEY } from "@lianmed/utils";
+import s from "store";
 // const isDev = process.env.NODE_ENV === 'development';
 // const URL_1 = window.CONFIG ? window.CONFIG.baseURL : URL;
 export const URL = window.CONFIG ? window.CONFIG.baseURL : `${window.location.protocol}//${window.location.host}`;
@@ -102,13 +103,15 @@ class Auth {
   set(value) {
     const TOKEN = 'Bearer ' + value;
     store.set(this.key, TOKEN);
+    debugger
+    s.set(TOKEN_KEY,TOKEN);
   }
   get() {
     const value = store.get(this.key);
     return value;
   }
 }
-export const auth =  new Auth();
+export const auth = new Auth();
 
 /**
  * 存储url参数信息
@@ -140,7 +143,7 @@ export const account = new Person();
 // 加密函数
 export function compile(code) {
   let c = String.fromCharCode(code.charCodeAt(0) + code.length);
-  for(let i = 1; i < code.length; i++) {
+  for (let i = 1; i < code.length; i++) {
     c += String.fromCharCode(code.charCodeAt(i) + code.charCodeAt(i - 1));
   }
   return escape(c);
@@ -150,7 +153,7 @@ export function compile(code) {
 export function uncompile(code) {
   code = unescape(code);
   let c = String.fromCharCode(code.charCodeAt(0) - code.length);
-  for(let i = 1; i < code.length; i ++) {
+  for (let i = 1; i < code.length; i++) {
     c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
   }
   return c;

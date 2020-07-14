@@ -6,11 +6,11 @@ import request from '@lianmed/request';
 import WardModal from './WardModal';
 import { auth, URL } from '../../common/utils';
 
-request.config({
-  Authorization: auth.get(),
-  // prefix: window.CONFIG.baseURL,
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   // prefix: window.CONFIG.baseURL,
+//   prefix: `${URL}/api`,
+// });
 
 class Wards extends Component {
   constructor(params) {

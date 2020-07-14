@@ -12,11 +12,11 @@ import  request  from '@lianmed/request';
 import { auth, URL } from '../../common/utils';
 import DiagnosticTemplateModal from './DiagnosticTemplateModal';
 
-request.config({
-  Authorization: auth.get(),
-  // prefix: window.CONFIG.baseURL,
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   // prefix: window.CONFIG.baseURL,
+//   prefix: `${URL}/api`,
+// });
 
 export default function DiagnosticTemplate() {
   let formRef = null;

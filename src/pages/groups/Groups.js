@@ -6,10 +6,10 @@ import request from '@lianmed/request';
 import GroupModal from './GroupModal';
 import { auth, URL } from '../../common/utils';
 
-request.config({
-  Authorization: auth.get(),
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   prefix: `${URL}/api`,
+// });
 
 export default class Groups extends Component {
   constructor(params) {

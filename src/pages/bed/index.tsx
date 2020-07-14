@@ -21,11 +21,11 @@ const mapStatusToText = {
   2: '停止',
   3: '离线',
 };
-request.config({
-  Authorization: auth.get(),
-  // prefix: window.CONFIG.baseURL,
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   // prefix: window.CONFIG.baseURL,
+//   prefix: `${URL}/api`,
+// });
 
 const EditableContext = React.createContext<WrappedFormUtils>(null);
 

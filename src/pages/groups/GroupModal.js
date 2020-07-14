@@ -5,10 +5,10 @@ import { Modal, Input, Select, Button } from 'antd';
 import request from '@lianmed/request';
 import { auth, URL } from '../../common/utils';
 
-request.config({
-  Authorization: auth.get(),
-  prefix: `${URL}/api`,
-});
+// request.config({
+//   Authorization: auth.get(),
+//   prefix: `${URL}/api`,
+// });
 
 class GroupModal extends Component {
   state = { authorities: []}

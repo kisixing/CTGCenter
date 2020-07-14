@@ -37,11 +37,11 @@ class App extends Component {
       this.fetchAuth();
     }
     // 组件专有request
-    r.config({
-      Authorization: AUTH_TOKEN,
-      // prefix: window.CONFIG.baseURL,
-      prefix: `${URL}/api`,
-    });
+    // r.config({
+    //   Authorization: AUTH_TOKEN,
+    //   // prefix: window.CONFIG.baseURL,
+    //   prefix: `${URL}/api`,
+    // });
 
     event.on('signed', this.fetchList);
   }
