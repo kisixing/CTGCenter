@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, message } from 'antd';
 import moment from 'moment';
 import { stringify } from 'qs';
-import r from '@lianmed/request';
+// import r from '@lianmed/request';
 import request from '../../common/request';
 import { transformsCTG, auth, URL } from '../../common/utils';
 
@@ -41,11 +41,11 @@ class Archives extends PureComponent {
     this.getCount();
     this.getRecords();
     //
-    r.config({
-      Authorization: auth.get(),
-      // prefix: window.CONFIG.baseURL,
-      prefix: `${URL}/api`,
-    });
+    // r.config({
+    //   Authorization: auth.get(),
+    //   // prefix: window.CONFIG.baseURL,
+    //   prefix: `${URL}/api`,
+    // });
   }
 
   getFields = () => {
