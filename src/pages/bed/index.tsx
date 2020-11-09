@@ -3,17 +3,15 @@
  */
 
 
-import React, { useState, useEffect, Fragment } from 'react';
-import ReactDOM from 'react-dom';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Table, Input, Popconfirm, Button, Select, message } from 'antd';
-import { request } from "../../common/request";
-import { stringify } from 'qs';
+import { Button, Input, message, Popconfirm, Select, Table } from 'antd';
 import { WrappedFormUtils } from "antd/lib/form/Form";
+import { stringify } from 'qs';
+import React, { Fragment, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { request } from "../../common/request";
 import SearchForm from './SearchForm';
-import useLogin from "./useLogin";
-import { auth, URL } from '../../common/utils';
 import styles from './index.less';
 
 const mapStatusToText = {
@@ -238,12 +236,7 @@ const EditableTable = (props: any) => {
                 disabled={editingKey !== ''}
                 onClick={() => {
                   setEditingKey(record.id);
-                  const len = dd.filter(_ => _.areano === record.areano).length
-                  if (len > 50) {
-                    message.info(`这个病区已经绑定超过50个设备`)
 
-                  }
-                  // fetchOptions()
                 }}
               >
                 编辑
@@ -293,6 +286,16 @@ const EditableTable = (props: any) => {
       // 更新病区名
       const areaNO = row['areano'];
       const currentWard = options.filter(item => item.wardId === areaNO)[0];
+
+      // check 50
+      const bedsInThisArea = newData.filter(_ => _.areano === areaNO)
+      if (bedsInThisArea.length >= 50) {
+
+        return message.info(`这个病区已经绑定超过50个设备`)
+
+      }
+      // check 50
+
       // console.log('object', options, areaNO, currentWard);
       if (index > -1) {
         request
