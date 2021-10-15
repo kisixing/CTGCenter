@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Modal, Input, Select, Switch, Button } from 'antd';
+import { Modal, Input, Select, Switch, Button, InputNumber } from 'antd';
 
 class WardModal extends Component {
   render() {
@@ -60,6 +60,13 @@ class WardModal extends Component {
               initialValue: true,
               rules: [{ required: true, message: '请确认是否开启自动监护!' }],
             })(<Switch checkedChildren="on" unCheckedChildren="off" />)}
+          </Form.Item>
+          <Form.Item label="监护结束提醒">
+            {getFieldDecorator('endWorkTipTime', {
+
+
+              rules: [{ required: true, message: '请输入!' }],
+            })(<InputNumber />)}
           </Form.Item>
           {title.includes('编辑') ? (
             <Form.Item label="绑定设备列表">

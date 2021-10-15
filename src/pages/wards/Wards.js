@@ -37,7 +37,7 @@ class Wards extends Component {
         selected: record,
       },
       () => {
-        const { wardId, wardName, wardNamezh, wardType, note, auto } = record;
+        const { wardId, wardName, wardNamezh, wardType, note, auto, endWorkTipTime } = record;
 
         this.formRef.props.form.setFieldsValue({
           wardId: wardId,
@@ -45,6 +45,7 @@ class Wards extends Component {
           wardNamezh: wardNamezh,
           wardType: wardType,
           auto: auto,
+          endWorkTipTime: endWorkTipTime,
           note: note ? note.split(',') : [],
         });
       },
@@ -134,7 +135,7 @@ class Wards extends Component {
   };
 
   // 绑定的设备对应名称
-  noToName = (value)=> {
+  noToName = (value) => {
     const beds = this.state.bedinfos;
     let noArr = [];
     let nameArr = [];
@@ -187,6 +188,13 @@ class Wards extends Component {
         key: 'auto',
         width: 100,
         render: text => (!!text ? <Badge status="success" /> : <Badge status="default" />),
+      },
+      {
+        title: '监护结束提醒',
+        dataIndex: 'endWorkTipTime',
+        key: 'endWorkTipTime',
+        width: 100,
+
       },
       {
         title: '绑定设备',
