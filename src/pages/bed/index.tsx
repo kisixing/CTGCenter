@@ -288,12 +288,12 @@ const EditableTable = (props: any) => {
       const currentWard = options.filter(item => item.wardId === areaNO)[0];
 
       // check 50
-      const bedsInThisArea = newData.filter(_ => _.areano === areaNO)
-      if (bedsInThisArea.length >= 50) {
+      // const bedsInThisArea = newData.filter(_ => _.areano === areaNO)
+      // if (bedsInThisArea.length >= 50) {
 
-        return message.info(`这个病区已经绑定超过50个设备`)
+      //   return message.info(`这个病区已经绑定超过50个设备`)
 
-      }
+      // }
       // check 50
 
       // console.log('object', options, areaNO, currentWard);

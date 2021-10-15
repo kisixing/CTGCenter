@@ -33,12 +33,12 @@ export const LoginPannel = ({ handleOk }) => {
     });
   }
   return (
-    <div style={{padding:12}}>
+    <div style={{ padding: 12 }}>
       <div className={styles.logo}>
         <img alt="logo" src={config.logoPath} />
         <span>{config.siteName}</span>
       </div>
-      <Form form={form} defaultValue={{username:'',password:''}}>
+      <Form form={form} defaultValue={{ username: '', password: '' }}>
         <FormItem hasFeedback name="username" rules={[{ required: true }]}>
 
           <Input onPressEnter={submit} placeholder="输入用户名" />
@@ -47,7 +47,7 @@ export const LoginPannel = ({ handleOk }) => {
           <Input type="password" onPressEnter={submit} placeholder="输入密码" />
         </FormItem>
         <Row>
-          <Button block  type="primary" onClick={submit} loading={loading}>
+          <Button block type="primary" onClick={submit} loading={loading}>
             <span>登录</span>
           </Button>
           {/* <p>
@@ -71,7 +71,10 @@ function Login(props) {
       <div className={styles.form}>
         <LoginPannel handleOk={handleOk} />
       </div>
-      <div className={styles.footer}></div>
+      <div className={styles.footer}>
+        <span>网站备案号：</span>
+        <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">粤ICP备17048892号-1</a>
+      </div>
     </Fragment>
   );
 }

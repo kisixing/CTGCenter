@@ -63,7 +63,7 @@ class App extends Component {
     request
       .get('/prenatal-visits', {
         params: {
-          'visiDate.greaterOrEqalThan': visitDate,
+          'visitDate.greaterOrEqualThan': visitDate,
           'diagnosis.specified': false,
           'diagnosisCode.equals': areaNO,
         },

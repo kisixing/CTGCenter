@@ -135,7 +135,7 @@ const CreateRecordModal = Form.create({
     validateNoChinese = (rule, value, callback) => {
       const reg = /^[^\u4e00-\u9fa5]+$/g;
       const regEmpty = /^\s*$/g;
-      if (value && !reg.test(value)) {
+      if (false && value && !reg.test(value)) {
         callback('书写格式错误，床号不能为中文');
       } else if (value && regEmpty.test(value)) {
         callback('床号不能为空');
