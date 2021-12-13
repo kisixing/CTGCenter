@@ -92,22 +92,22 @@ export class SiderMenu extends Component {
           <LegacyIcon type="upload" />
           <span>床位管理</span>
         </Menu.Item>
-        <Menu.Item
+        {/* <Menu.Item
           key="007"
           title="监护页"
           href={`${origin}/ctg.html?auth_user=admin&auth_token=SLX9FT0`}
         >
           <LegacyIcon type="upload" />
           <span>监护页</span>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="008" title="用户管理" href={`${origin}/user-account.html`}>
           <LegacyIcon type="user" />
           <span>用户管理</span>
         </Menu.Item>
-        <Menu.Item key="009" title="待处理档案管理" href={`${origin}/dcms.html`}>
+        {/* <Menu.Item key="009" title="待处理档案管理" href={`${origin}/dcms.html`}>
           <LegacyIcon type="user" />
           <span>待处理档案管理</span>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="010" title="档案管理" href={`${origin}/archives.html`}>
           <LegacyIcon type="file" />
           <span>档案管理</span>
@@ -124,10 +124,10 @@ export class SiderMenu extends Component {
           <LegacyIcon type="copy" />
           <span>模板管理</span>
         </Menu.Item>
-        <Menu.Item key="014" title="模板管理" href={`${origin}/setting.html`}>
+        {/* <Menu.Item key="014" title="模板管理" href={`${origin}/setting.html`}>
           <LegacyIcon type="copy" />
           <span>参数设置</span>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
     );
   }

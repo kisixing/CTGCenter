@@ -257,9 +257,9 @@ class Account extends PureComponent {
             const { activated, id } = record;
             let dom = null;
             if (!activated) {
-              dom = <a onClick={() => this.start(id)}>启用</a>;
+              dom = <Button type="link" onClick={() => this.start(record.login)}>解锁</Button>;
             } else {
-              dom = <a>停用</a>;
+              dom = <Button type="link" disabled>解锁</Button>;
             }
             return (
               <>
@@ -306,8 +306,10 @@ class Account extends PureComponent {
       });
   };
 
-  start = key => {
-    console.log('TCL: Account -> key -> start', key);
+  start = login => {
+    request.put(`/users/activate/${login}`).then(()=>{
+      this.fetchUsers()
+    })
   };
 
   stop = key => {

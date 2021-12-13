@@ -174,7 +174,7 @@ function ReportPreview(props) {
   };
 
   function compare(key) {
-    return function(value1, value2) {
+    return function (value1, value2) {
       const val1 = value1[key];
       const val2 = value2[key];
       const v1 = moment(val1).valueOf();
@@ -231,7 +231,10 @@ function ReportPreview(props) {
         </Menu>
         <div style={{ flex: 1, padding: '12px 0' }}>
           <Spin wrapperClassName={styles.chart} spinning={loading}>
-            <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
+            <PreviewContent
+              //  pdfBase64={pdfBase64}
+              wh={wh} isFull borderd={false} fuckBizsn={currentReport && currentReport.bizSn} />
+
           </Spin>
         </div>
         <div style={{ position: 'absolute', bottom: 8, right: 24, zIndex: 99 }}>

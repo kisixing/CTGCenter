@@ -92,21 +92,21 @@ class FieldForm extends Component {
     return (
       <Form layout="inline" className={styles.form}>
         <Row>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="开始日期">
               {getFieldDecorator('startTime')(
                 <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择开始日期" />,
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
                 <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择结束日期" />,
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="是否绑定">
               {getFieldDecorator('type')(
                 <Select style={{ width: 120 }}>
@@ -117,7 +117,21 @@ class FieldForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
+            <Form.Item label="档案号">
+              {getFieldDecorator('note')(
+                <Input />,
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={4}>
+            <Form.Item label="姓名">
+              {getFieldDecorator('name')(
+                <Input />,
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={4}>
             <Form.Item>
               <Button type="primary" onClick={handleSearch} loading={false}>
                 搜索

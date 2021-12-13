@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: `${URL}/api`
 });
 
-instance.defaults.timeout = 5000;
+instance.defaults.timeout = 30 * 1000;
 
 // http request 拦截器
 instance.interceptors.request.use(

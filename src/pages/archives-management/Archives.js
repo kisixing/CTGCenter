@@ -71,7 +71,7 @@ class Archives extends PureComponent {
       let sTime = undefined;
       let eTime = undefined;
       let t = undefined;
-      let { startTime, endTime, type } = values;
+      let { startTime, endTime, type, name, note } = values;
       if (startTime) {
         sTime = moment(startTime).format('YYYY-MM-DD');
       }
@@ -84,13 +84,13 @@ class Archives extends PureComponent {
       if (type === 'false') {
         t = false;
       }
-      this.getRecords(sTime, eTime, t, size, page);
+      this.getRecords(sTime, eTime, t, size, page, name, note);
       this.getCount(sTime, eTime, t);
     });
   };
 
   // search data
-  getRecords = (sTime = STARTTIME, eTime = ENDTIME, t, size = 10, page = 0) => {
+  getRecords = (sTime = STARTTIME, eTime = ENDTIME, t, size = 10, page = 0, name = undefined, note = undefined) => {
     // console.log('44444444444', sTime, eTime, size, page);
     const _this = this;
     _this.setState({ loading: true });
@@ -99,10 +99,12 @@ class Archives extends PureComponent {
       'pregnancyId.specified': t, // 不要求检索已经绑定的档案列表
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
+      'name.contains': name,
+      'note.equals': note,
       size,
       page,
     };
-    request.get(`/prenatal-visitspage?${stringify(params)}`).then(function(response) {
+    request.get(`/prenatal-visitspage?${stringify(params)}`).then(function (response) {
       const data = response.data;
       // 成功获取列表后设置选中首行
       _this.setState({
@@ -123,7 +125,7 @@ class Archives extends PureComponent {
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
     };
-    request.get(`/prenatal-visits/count?${stringify(params)}`).then(function(response) {
+    request.get(`/prenatal-visits/count?${stringify(params)}`).then(function (response) {
       _this.setState({ total: response.data });
     });
   };

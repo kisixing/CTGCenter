@@ -302,7 +302,7 @@ class TableList extends Component {
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize, values);
-      getRecords(values.startTime, values.endTime, values.type, pageSize, page - 1);
+      getRecords(values.startTime, values.endTime, values.type, pageSize, page - 1, values.name, values.note);
       getCount(values.startTime, values.endTime, values.type);
       savePagination({ size: pageSize, page: page - 1 });
     }
@@ -313,7 +313,7 @@ class TableList extends Component {
     const values = this.getValues();
     // console.log('TCL: TableList -> onShowSizeChange -> current, size', values, current, size);
     const { getRecords, getCount, savePagination } = this.props;
-    getRecords(values.startTime, values.endTime, values.type, size, 0);
+    getRecords(values.startTime, values.endTime, values.type, size, 0,values.name,values.note);
     getCount(values.startTime, values.endTime, values.type);
     // savePagination({ size: pageSize, page: page - 1 });
     savePagination({ size: size, page: 0 });
@@ -433,7 +433,7 @@ class TableList extends Component {
             // 当存在action时，会触发多个事件
             return {
               onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => {},
+              onDoubleClick: event => { },
             };
           }}
           loading={loading}

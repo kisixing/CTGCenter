@@ -8,7 +8,7 @@ const NO_TOKEN_LIST = ['/prenatal-visits-encrypt'];
 
 const instance = axios.create({
   baseURL: `${URL}/api`,
-  timeout: 5000,
+  timeout: 1000 * 30,
 });
 request.config({prefix:`${URL}/api`})
 console.log('request1',request)
